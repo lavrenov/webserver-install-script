@@ -2,19 +2,20 @@
 
 action=$1
 site=$2
+username=$3
 nginxSiteDir="/etc/nginx/sites-enabled/"
 apacheSiteDir="/etc/apache2/sites-enabled/"
-wwwDir="/var/www/"
+wwwDir="/var/www/$username/"
 
-if [[ -n "$site" ]] && [[ -n "$action" ]];
+if [[ -n "$site" ]] && [[ -n "$action" ]] && [[ -n "$username" ]];
 then
     # Add site
     if [[ "$action" == "add" ]];
     then
-        cp ./config/template/nginx.http.conf "$nginxSiteDir$site.conf"
+        cp -i ./config/template/nginx.http.conf "$nginxSiteDir$site.conf"
         sed -i "s/%DOMAIN%/$site/g" "$nginxSiteDir$site.conf"
 
-        cp ./config/template/apache.host.conf "$apacheSiteDir$site.conf"
+        cp -i ./config/template/apache.host.conf "$apacheSiteDir$site.conf"
         sed -i "s/%DOMAIN%/$site/g" "$apacheSiteDir$site.conf"
 
         mkdir -p "$wwwDir$site/www"
