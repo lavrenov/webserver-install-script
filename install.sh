@@ -15,6 +15,8 @@ apt-get install php php-fpm -y
 systemctl enable php7.2-fpm
 systemctl start php7.2-fpm
 cp ./config/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default
+cp ./config/etc/php/7.2/apache2/php.ini /etc/php/7.2/apache2/php.ini
+cp ./config/etc/php/7.2/fpm/php.ini /etc/php/7.2/fpm/php.ini
 systemctl restart nginx
 
 echo "Install MariaDB"
