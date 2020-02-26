@@ -18,5 +18,5 @@ then
         userdel -r "$username"
     fi
 else
-    echo "Error"
+    echo "Required parameters not entered"
 fi

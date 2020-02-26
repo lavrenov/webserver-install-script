@@ -40,5 +40,5 @@ then
     systemctl reload nginx
     systemctl reload apache2
 else
-    echo "Error"
+    echo "Required parameters not entered"
 fi
