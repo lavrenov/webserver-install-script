@@ -48,6 +48,8 @@ echo "Install FTP" | tee -a "$log"
 apt-get install proftpd -y 2>> "$log"
 cp ./config/etc/proftpd/proftpd.conf /etc/proftpd/proftpd.conf 2>> "$log"
 cp ./config/etc/proftpd/conf.d/custom.conf /etc/proftpd/conf.d/custom.conf 2>> "$log"
+touch /etc/proftpd/ftpd.passwd
+chmod o-rwx /etc/proftpd/ftpd.passwd
 systemctl enable proftpd 2>> "$log"
 systemctl restart proftpd 2>> "$log"
 
