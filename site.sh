@@ -25,7 +25,7 @@ then
 
         echo "<?php echo \"<h1>$site</h1>\"; ?>" > "$wwwDir$site/www/index.php"
 
-        chown -R www-data:www-data "$wwwDir$site"
+        chown -R "$username":"$username" "$wwwDir$site"
         chmod -R 775 "$wwwDir$site"
     fi
 
