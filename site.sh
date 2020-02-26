@@ -2,9 +2,9 @@
 
 action=$1
 site=$2
-nginxSiteDir="./etc/nginx/sites-enabled/"
-apacheSiteDir="./etc/apache2/sites-enabled/"
-wwwDir="./var/www/"
+nginxSiteDir="/etc/nginx/sites-enabled/"
+apacheSiteDir="/etc/apache2/sites-enabled/"
+wwwDir="/var/www/"
 
 if [[ -n "$site" ]] && [[ -n "$action" ]];
 then
