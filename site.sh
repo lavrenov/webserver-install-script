@@ -34,9 +34,9 @@ then
     # Remove site
     if [[ "$action" == "remove" ]];
     then
-        rm "$nginxSiteDir$site.conf"
-        rm "$apacheSiteDir$site.conf"
-        rm -R "$wwwDir$site/"
+        rm -f "$nginxSiteDir$site.conf"
+        rm -f "$apacheSiteDir$site.conf"
+        rm -Rf "$wwwDir$site/"
     fi
 
     systemctl reload nginx
