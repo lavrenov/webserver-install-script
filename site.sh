@@ -14,11 +14,11 @@ then
     then
         cp -i ./config/template/nginx.http.conf "$nginxSiteDir$site.conf"
         sed -i "s/%DOMAIN%/$site/g" "$nginxSiteDir$site.conf"
-	    sed -i "s/%USERNAME%/$username/g" "$nginxSiteDir$site.conf"
+	sed -i "s/%USERNAME%/$username/g" "$nginxSiteDir$site.conf"
 
         cp -i ./config/template/apache.host.conf "$apacheSiteDir$site.conf"
         sed -i "s/%DOMAIN%/$site/g" "$apacheSiteDir$site.conf"
-	    sed -i "s/%USERNAME%/$username/g" "$apacheSiteDir$site.conf"
+	sed -i "s/%USERNAME%/$username/g" "$apacheSiteDir$site.conf"
 
         mkdir -p "$wwwDir$site/www"
         mkdir -p "$wwwDir$site/tmp"

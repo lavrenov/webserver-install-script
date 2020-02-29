@@ -35,9 +35,11 @@ systemctl restart nginx 2>> "$log"
 
 echo "Install MariaDB" | tee -a "$log"
 apt install mariadb-server -y 2>> "$log"
+cp ./config/etc/mysql/conf.d/my.cnf /etc/mysql/conf.d/my.cnf 2>> "$log"
+systemctl restart mariadb
 
 echo "Install PHP" | tee -a "$log"
-apt install php7.4 php7.4-fpm php7.4-mysql php7.4-mysqli php7.4-curl php7.4-json php7.4-cgi php7.4-gd php7.4-zip php7.4-mbstring php7.4-xml php7.4-xmlrpc -y 2>> "$log"
+apt install php7.4 php7.4-fpm php7.4-mysql php7.4-mysqli php7.4-curl php7.4-json php7.4-cgi php7.4-gd php7.4-zip php7.4-mbstring php7.4-xml php7.4-xmlrpc php7.4-gmp -y 2>> "$log"
 systemctl restart php7.4-fpm 2>> "$log"
 
 echo "Install Memcached" | tee -a "$log"
@@ -56,3 +58,7 @@ mysql_secure_installation 2>> "$log"
 echo "===========================================" >> "$log"
 date +"Finished - %F %T" >> "$log"
 echo "===========================================" >> "$log"
+
+#memory_limit = 256M
+#post_max_size = 1G
+#upload_max_filesize = 100M
