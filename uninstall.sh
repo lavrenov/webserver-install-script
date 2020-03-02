@@ -13,6 +13,7 @@ rm -Rf /etc/nginx/
 rm -Rf /etc/apache2/
 rm -Rf /var/www/
 rm -Rf /var/lib/mysql/
+rm -Rf /usr/share/phpmyadmin/
 
 apt autoremove
 apt autoclean

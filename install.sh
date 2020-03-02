@@ -64,7 +64,7 @@ rm phpMyAdmin-5.0.1-all-languages.tar.gz 2>> "$log"
 rm -rf phpMyAdmin-5.0.1-all-languages 2>> "$log"
 mkdir /usr/share/phpmyadmin/tmp 2>> "$log"
 chmod 777 /usr/share/phpmyadmin/tmp 2>> "$log"
-cp config.sample.inc.php config.inc.php 2>> "$log"
+cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php 2>> "$log"
 ln -s /usr/share/phpmyadmin /var/www/html 2>> "$log"
 mysql -e "update mysql.user set plugin='' where user='root';"
 systemctl restart mariadb
