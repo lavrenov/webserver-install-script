@@ -27,7 +27,8 @@ then
     if [[ "${action}" == "remove" ]];
     then
 	    systemctl stop php7.4-fpm
-        userdel -r "${username}"
+	    killall -u "${username}"
+        userdel "${username}"
 	    ftpasswd --passwd --file=/etc/proftpd/ftpd.passwd --name="${username}" --delete-user
 	    rm -f "/etc/php/7.4/fpm/pool.d/${username}.conf"
 	    systemctl start php7.4-fpm

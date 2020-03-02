@@ -50,7 +50,7 @@ then
     then
         rm -f "${nginxSiteDir}${site}.conf"
         rm -f "${apacheSiteDir}${site}.conf"
-        rm -Rf "${wwwDir}${site}/"
+        rm -f "${phpFpmPoolConf}"
     fi
 
     systemctl reload nginx
