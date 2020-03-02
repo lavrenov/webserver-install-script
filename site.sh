@@ -51,6 +51,7 @@ then
         rm -f "${nginxSiteDir}${site}.conf"
         rm -f "${apacheSiteDir}${site}.conf"
         rm -f "${phpFpmPoolConf}"
+        systemctl restart php7.4-fpm
     fi
 
     systemctl reload nginx
