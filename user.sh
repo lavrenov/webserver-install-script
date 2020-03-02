@@ -34,5 +34,5 @@ then
 	    systemctl start php7.4-fpm
     fi
 else
-    echo "Required parameters not entered"
+    echo "Required parameters not entered (user.sh [add|remove] [username] [password])"
 fi

@@ -57,5 +57,5 @@ then
     systemctl reload nginx
     systemctl reload apache2
 else
-    echo "Required parameters not entered"
+    echo "Required parameters not entered (site.sh [add|remove] [domain] [username] [separate fpm pool (y|n)])"
 fi
