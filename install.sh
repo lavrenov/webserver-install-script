@@ -55,10 +55,20 @@ systemctl restart proftpd 2>> "$log"
 
 mysql_secure_installation 2>> "$log"
 
+echo "Install phpMyAdmin" | tee -a "$log"
+wget https://files.phpmyadmin.net/phpMyAdmin/5.0.1/phpMyAdmin-5.0.1-all-languages.tar.gz -P /tmp 2>> "$log"
+tar xzf /tmp/phpMyAdmin-5.0.1-all-languages.tar.gz 2>> "$log"
+mkdir /usr/share/phpmyadmin 2>> "$log"
+mv /tmp/phpMyAdmin-5.0.1-all-languages/* /usr/share/phpmyadmin 2>> "$log"
+rm /tmp/phpMyAdmin-5.0.1-all-languages.tar.gz 2>> "$log"
+rm -rf /tmp/phpMyAdmin-5.0.1-all-languages 2>> "$log"
+mkdir /usr/share/phpmyadmin/tmp 2>> "$log"
+chmod 777 /usr/share/phpmyadmin/tmp 2>> "$log"
+cp config.sample.inc.php config.inc.php 2>> "$log"
+ln -s /usr/share/phpmyadmin /var/www/html 2>> "$log"
+mysql -e "update mysql.user set plugin='' where user='root';"
+systemctl restart mariadb
+
 echo "===========================================" >> "$log"
 date +"Finished - %F %T" >> "$log"
 echo "===========================================" >> "$log"
-
-#memory_limit = 256M
-#post_max_size = 1G
-#upload_max_filesize = 100M
