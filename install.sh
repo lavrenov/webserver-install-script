@@ -8,7 +8,7 @@ echo "===========================================" >> "$log"
 
 echo "Update system" | tee -a "$log"
 apt update -y && apt upgrade -y 2>> "$log"
-apt install software-properties-common -y 2>> "$log"
+apt install curl unzip software-properties-common -y 2>> "$log"
 add-apt-repository ppa:ondrej/php -y 2>> "$log"
 
 echo "Install Apache" | tee -a "$log"
@@ -68,6 +68,10 @@ cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.
 ln -s /usr/share/phpmyadmin /var/www/html 2>> "$log"
 mysql -e "update mysql.user set plugin='' where user='root';"
 systemctl restart mariadb
+
+echo "Install Composer" | tee -a "$log"
+curl -sS https://getcomposer.org/installer -o composer-setup.php
+php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 echo "===========================================" >> "$log"
 date +"Finished - %F %T" >> "$log"
