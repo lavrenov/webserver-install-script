@@ -54,8 +54,6 @@ touch /etc/proftpd/ftpd.passwd
 chmod o-rwx /etc/proftpd/ftpd.passwd
 systemctl restart proftpd 2>> "$log"
 
-mysql_secure_installation 2>> "$log"
-
 echo "Install phpMyAdmin" | tee -a "$log"
 wget https://files.phpmyadmin.net/phpMyAdmin/5.0.1/phpMyAdmin-5.0.1-all-languages.tar.gz
 tar xzf phpMyAdmin-5.0.1-all-languages.tar.gz 2>> "$log"
