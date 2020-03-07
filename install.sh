@@ -10,6 +10,7 @@ echo "Update system" | tee -a "$log"
 apt update -y && apt upgrade -y 2>> "$log"
 apt install curl unzip software-properties-common -y 2>> "$log"
 add-apt-repository ppa:ondrej/php -y 2>> "$log"
+apt update -y 2>> "$log"
 
 echo "Install Apache" | tee -a "$log"
 apt install apache2 libapache2-mod-php7.4 libapache2-mod-fcgid -y 2>> "$log"
@@ -72,6 +73,7 @@ systemctl restart mariadb
 echo "Install Composer" | tee -a "$log"
 curl -sS https://getcomposer.org/installer -o composer-setup.php
 php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+rm -f composer-setup.php
 
 echo "===========================================" >> "$log"
 date +"Finished - %F %T" >> "$log"
