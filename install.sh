@@ -8,8 +8,8 @@ echo "===========================================" >> "$log"
 
 echo "Update system" | tee -a "$log"
 apt update -y && apt upgrade -y 2>> "$log"
-apt install curl unzip software-properties-common -y 2>> "$log"
-add-apt-repository ppa:ondrej/php -y 2>> "$log"
+apt install curl unzip software-properties-common apt-transport-https -y 2>> "$log"
+add-apt-repository ppa:ondrej/php -y
 apt update -y 2>> "$log"
 
 echo "Install Apache" | tee -a "$log"
@@ -74,6 +74,21 @@ echo "Install Composer" | tee -a "$log"
 curl -sS https://getcomposer.org/installer -o composer-setup.php
 php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 rm -f composer-setup.php
+
+echo "Install Certbot" | tee -a "$log"
+add-apt-repository ppa:certbot/certbot -y
+apt update -y 2>> "$log"
+apt install certbot -y 2>> "$log"
+apt install python-certbot-nginx -y 2>> "$log"
+
+echo "Install Jenkins" | tee -a "$log"
+apt install openjdk-8-jre -y 2>> "$log"
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list' 2>> "$log"
+apt update -y 2>> "$log"
+apt install jenkins -y 2>> "$log"
+cp ./config/etc/default/jenkins /etc/default/jenkins 2>> "$log"
+systemctl jenkins restart
 
 echo "===========================================" >> "$log"
 date +"Finished - %F %T" >> "$log"
