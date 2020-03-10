@@ -4,7 +4,7 @@ USERNAME=$1
 DB_USER=
 DB_PASS=
 DATE=`date +%Y-%m-%d_%H-%M-%S`
-BACKUP_DIR=/var/www/backups/${USERNAME}
+BACKUP_DIR=/backup/${USERNAME}/${DATE}
 DATABASE_LIST=/tmp/databases.list
 WWW_DIR=/var/www
 
@@ -24,4 +24,6 @@ cd ${BACKUP_DIR}
 tar -zcf ${DATE}.tar.gz ${USERNAME}
 rm -Rf ${USERNAME}
 rm -f ${DATABASE_LIST}
+split -b 50M ${DATE}.tar.gz "${DATE}.tar.gz.part_"
+rm -f ${DATE}.tar.gz
 chown ${USERNAME}:${USERNAME} ${DATE}.tar.gz
