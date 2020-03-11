@@ -30,7 +30,7 @@ then
     rm -f ${DATABASE_LIST}
     split -b 50M ${DATE}.tar.gz "${DATE}.tar.gz.part_"
     rm -f ${DATE}.tar.gz
-    chown ${USERNAME}:${USERNAME} ${DATE}.tar.gz
+    chown ${USERNAME}:${USERNAME} ${BACKUP_USER_DIR}
 
     find "${BACKUP_USER_DIR}" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rnk1 | awk 'NR>'"${BACKUP_COUNT}"' { sub(/^\S+ /, "", $0); system("rm -r -f \"" $0 "\"")}'
 else
