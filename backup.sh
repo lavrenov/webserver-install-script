@@ -19,16 +19,16 @@ then
     mkdir -p ${BACKUP_DATE_DIR}/${USERNAME}/configs/nginx
     mkdir -p ${BACKUP_DATE_DIR}/${USERNAME}/configs/php7.4-fpm
 
-    cp -ar ${WWW_DIR}/${USERNAME}/. ${BACKUP_DATE_DIR}/${USERNAME}
-    cp -ar /etc/php/7.4/fpm/pool.d/${USERNAME}.conf ${BACKUP_DATE_DIR}/${USERNAME}/configs/php7.4-fpm/${USERNAME}.conf 2>/dev/null || :
+    cp -aRL ${WWW_DIR}/${USERNAME}/. ${BACKUP_DATE_DIR}/${USERNAME}
+    cp -aRL /etc/php/7.4/fpm/pool.d/${USERNAME}.conf ${BACKUP_DATE_DIR}/${USERNAME}/configs/php7.4-fpm/${USERNAME}.conf 2>/dev/null || :
 
     ls ${WWW_DIR}/${USERNAME} | grep -v php > ${SITES_LIST}
     for site in `cat ${SITES_LIST}`
     do
-        cp -ar /etc/letsencrypt/live/${site} ${BACKUP_DATE_DIR}/${USERNAME}/ssl 2>/dev/null || :
-        cp -ar /etc/apache2/sites-enabled/${site}.conf ${BACKUP_DATE_DIR}/${USERNAME}/configs/apache2/${site}.conf 2>/dev/null || :
-        cp -ar /etc/nginx/sites-enabled/${site}.conf ${BACKUP_DATE_DIR}/${USERNAME}/configs/nginx/${site}.conf 2>/dev/null || :
-        cp -ar /etc/php/7.4/fpm/pool.d/${USERNAME}_${site}.conf ${BACKUP_DATE_DIR}/${USERNAME}/configs/php7.4-fpm/${USERNAME}_${site}.conf 2>/dev/null || :
+        cp -aRL /etc/letsencrypt/live/${site} ${BACKUP_DATE_DIR}/${USERNAME}/ssl 2>/dev/null || :
+        cp -aRL /etc/apache2/sites-enabled/${site}.conf ${BACKUP_DATE_DIR}/${USERNAME}/configs/apache2/${site}.conf 2>/dev/null || :
+        cp -aRL /etc/nginx/sites-enabled/${site}.conf ${BACKUP_DATE_DIR}/${USERNAME}/configs/nginx/${site}.conf 2>/dev/null || :
+        cp -aRL /etc/php/7.4/fpm/pool.d/${USERNAME}_${site}.conf ${BACKUP_DATE_DIR}/${USERNAME}/configs/php7.4-fpm/${USERNAME}_${site}.conf 2>/dev/null || :
     done
 
     mysql -u ${DB_USER} -p${DB_PASS} -e "show databases;" | grep "${USERNAME}_*" > ${DATABASE_LIST}
