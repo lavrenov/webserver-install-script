@@ -6,6 +6,9 @@ apt remove php* --purge -y
 apt remove mariadb* --purge -y
 apt remove nginx* --purge -y
 apt remove apache* --purge -y
+apt remove certbot* --purge -y
+apt remove openjdk-8-jre --purge -y
+apt remove jenkins* --purge -y
 
 rm -Rf /etc/proftpd/
 rm -Rf /etc/php/
@@ -14,6 +17,8 @@ rm -Rf /etc/apache2/
 rm -Rf /var/www/
 rm -Rf /var/lib/mysql/
 rm -Rf /usr/share/phpmyadmin/
+rm -Rf /usr/share/jenkins/
+rm -f /etc/default/jenkins
 
 apt autoremove
 apt autoclean

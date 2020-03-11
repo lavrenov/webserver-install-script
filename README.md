@@ -1,12 +1,25 @@
-# Web server install & manage script
+# Web Server install script
 This script install:
 - Apache
 - NGINX
-- MariaDB
-- PHP 7.4
+- MariaDB 10.0.38
+- PHP 7.4 + extensions:
+    - cgi
+    - curl
+    - fpm
+    - gd
+    - gmp
+    - intl
+    - json
+    - mbstring
+    - mysql
+    - mysqli
+    - xml
+    - xmlrpc
+    - zip
 - Memcached
 - ProFTP
-- phpMyAdmin
+- phpMyAdmin 5.0.1
 - Composer
 - Certbot
 - Jenkins
