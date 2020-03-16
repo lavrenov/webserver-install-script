@@ -2,6 +2,8 @@
 
 ![Build](https://github.com/lavrenov/webserver-install-script/workflows/Build/badge.svg)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/lavrenov/webserver-install-script?label=version)
+![GitHub repo size](https://img.shields.io/github/repo-size/lavrenov/webserver-install-script)
+![GitHub last commit](https://img.shields.io/github/last-commit/lavrenov/webserver-install-script)
 
 ## This script install
 

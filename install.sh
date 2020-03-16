@@ -7,13 +7,13 @@ date +"Start install - %F %T" >> "$log"
 echo "===========================================" >> "$log"
 
 echo "Update system" | tee -a "$log"
-apt update -y && apt upgrade -y 2>> "$log"
-apt install curl unzip software-properties-common apt-transport-https -y 2>> "$log"
+apt-get update -y && apt-get upgrade -y 2>> "$log"
+apt-get install curl unzip software-properties-common apt-transport-https -y 2>> "$log"
 add-apt-repository ppa:ondrej/php -y
-apt update -y 2>> "$log"
+apt-get update -y 2>> "$log"
 
 echo "Install Apache" | tee -a "$log"
-apt install apache2 libapache2-mod-php7.4 libapache2-mod-fcgid -y 2>> "$log"
+apt-get install apache2 libapache2-mod-php7.4 libapache2-mod-fcgid -y 2>> "$log"
 cp ./config/etc/apache2/ports.conf /etc/apache2/ports.conf 2>> "$log"
 cp ./config/etc/apache2/mods-available/dir.conf /etc/apache2/mods-available/dir.conf 2>> "$log"
 cp ./config/etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf 2>> "$log"
@@ -27,81 +27,82 @@ rm -f /var/www/html/index.html
 rm -f /var/www/html/index.nginx-debian.html
 echo "<?php phpinfo(); ?>" > "/var/www/html/index.php"
 systemctl restart apache2 2>> "$log"
+cat "$log"
 
-echo "Install NGINX" | tee -a "$log"
-apt install nginx -y 2>> "$log"
-cp ./config/etc/nginx/nginx.conf /etc/nginx/nginx.conf 2>> "$log"
-cp ./config/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default 2>> "$log"
-systemctl restart nginx 2>> "$log"
-
-echo "Install MariaDB" | tee -a "$log"
-apt install mariadb-server -y 2>> "$log"
-cp ./config/etc/mysql/conf.d/my.cnf /etc/mysql/conf.d/my.cnf 2>> "$log"
-systemctl restart mariadb
-
-echo "Install PHP" | tee -a "$log"
-apt install php7.4 php7.4-fpm php7.4-mysql php7.4-mysqli php7.4-curl php7.4-json php7.4-cgi php7.4-gd php7.4-zip php7.4-mbstring php7.4-xml php7.4-xmlrpc php7.4-gmp php7.4-intl -y 2>> "$log"
-systemctl restart php7.4-fpm 2>> "$log"
-
-echo "Install Memcached" | tee -a "$log"
-apt install memcached php-memcached -y 2>> "$log"
-
-echo "Install FTP" | tee -a "$log"
-apt install proftpd -y 2>> "$log"
-cp ./config/etc/proftpd/proftpd.conf /etc/proftpd/proftpd.conf 2>> "$log"
-cp ./config/etc/proftpd/conf.d/custom.conf /etc/proftpd/conf.d/custom.conf 2>> "$log"
-touch /etc/proftpd/ftpd.passwd
-chmod o-rwx /etc/proftpd/ftpd.passwd
-systemctl restart proftpd 2>> "$log"
-
-echo "Install phpMyAdmin" | tee -a "$log"
-wget https://files.phpmyadmin.net/phpMyAdmin/5.0.1/phpMyAdmin-5.0.1-all-languages.tar.gz
-tar xzf phpMyAdmin-5.0.1-all-languages.tar.gz 2>> "$log"
-mkdir /usr/share/phpmyadmin 2>> "$log"
-mv phpMyAdmin-5.0.1-all-languages/* /usr/share/phpmyadmin 2>> "$log"
-rm phpMyAdmin-5.0.1-all-languages.tar.gz 2>> "$log"
-rm -rf phpMyAdmin-5.0.1-all-languages 2>> "$log"
-mkdir /usr/share/phpmyadmin/tmp 2>> "$log"
-chmod 777 /usr/share/phpmyadmin/tmp 2>> "$log"
-cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php 2>> "$log"
-ln -s /usr/share/phpmyadmin /var/www/html 2>> "$log"
-mysql -e "update mysql.user set plugin='' where user='root';"
-systemctl restart mariadb
-
-echo "Install Composer" | tee -a "$log"
-curl -sS https://getcomposer.org/installer -o composer-setup.php
-php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-rm -f composer-setup.php
-
-echo "Install Certbot" | tee -a "$log"
-add-apt-repository ppa:certbot/certbot -y
-apt update -y 2>> "$log"
-apt install certbot -y 2>> "$log"
-apt install python-certbot-nginx -y 2>> "$log"
-
-echo "Install Jenkins" | tee -a "$log"
-apt install openjdk-8-jre -y 2>> "$log"
-wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-apt update -y 2>> "$log"
-apt install jenkins -y 2>> "$log"
-cp ./config/etc/default/jenkins /etc/default/jenkins 2>> "$log"
-systemctl restart jenkins
-
-echo "Install Fail2Ban" | tee -a "$log"
-apt install fail2ban -y 2>> "$log"
-cp ./config/etc/fail2ban/jail.d/defaults-debain.conf /etc/fail2ban/jail.d/defaults-debain.conf 2>> "$log"
-systemctl restart fail2ban
-
-echo "Install IP tables" | tee -a "$log"
-apt install iptables -y 2>> "$log"
-cp ./config/etc/iptables.start /etc/iptables.start 2>> "$log"
-cp ./config/etc/init.d/firewall.sh /etc/init.d/firewall.sh 2>> "$log"
-chmod +x /etc/iptables.start 2>> "$log"
-chmod +x /etc/init.d/firewall.sh 2>> "$log"
-update-rc.d firewall.sh defaults 2>> "$log"
-service firewall.sh start
-
-echo "===========================================" >> "$log"
-date +"Finished - %F %T" >> "$log"
-echo "===========================================" >> "$log"
+#echo "Install NGINX" | tee -a "$log"
+#apt-get install nginx -y 2>> "$log"
+#cp ./config/etc/nginx/nginx.conf /etc/nginx/nginx.conf 2>> "$log"
+#cp ./config/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default 2>> "$log"
+#systemctl restart nginx 2>> "$log"
+#
+#echo "Install MariaDB" | tee -a "$log"
+#apt-get install mariadb-server -y 2>> "$log"
+#cp ./config/etc/mysql/conf.d/my.cnf /etc/mysql/conf.d/my.cnf 2>> "$log"
+#systemctl restart mariadb
+#
+#echo "Install PHP" | tee -a "$log"
+#apt-get install php7.4 php7.4-fpm php7.4-mysql php7.4-mysqli php7.4-curl php7.4-json php7.4-cgi php7.4-gd php7.4-zip php7.4-mbstring php7.4-xml php7.4-xmlrpc php7.4-gmp php7.4-intl -y 2>> "$log"
+#systemctl restart php7.4-fpm 2>> "$log"
+#
+#echo "Install Memcached" | tee -a "$log"
+#apt-get install memcached php-memcached -y 2>> "$log"
+#
+#echo "Install FTP" | tee -a "$log"
+#apt-get install proftpd -y 2>> "$log"
+#cp ./config/etc/proftpd/proftpd.conf /etc/proftpd/proftpd.conf 2>> "$log"
+#cp ./config/etc/proftpd/conf.d/custom.conf /etc/proftpd/conf.d/custom.conf 2>> "$log"
+#touch /etc/proftpd/ftpd.passwd
+#chmod o-rwx /etc/proftpd/ftpd.passwd
+#systemctl restart proftpd 2>> "$log"
+#
+#echo "Install phpMyAdmin" | tee -a "$log"
+#wget https://files.phpmyadmin.net/phpMyAdmin/5.0.1/phpMyAdmin-5.0.1-all-languages.tar.gz
+#tar xzf phpMyAdmin-5.0.1-all-languages.tar.gz 2>> "$log"
+#mkdir /usr/share/phpmyadmin 2>> "$log"
+#mv phpMyAdmin-5.0.1-all-languages/* /usr/share/phpmyadmin 2>> "$log"
+#rm phpMyAdmin-5.0.1-all-languages.tar.gz 2>> "$log"
+#rm -rf phpMyAdmin-5.0.1-all-languages 2>> "$log"
+#mkdir /usr/share/phpmyadmin/tmp 2>> "$log"
+#chmod 777 /usr/share/phpmyadmin/tmp 2>> "$log"
+#cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php 2>> "$log"
+#ln -s /usr/share/phpmyadmin /var/www/html 2>> "$log"
+#mysql -e "update mysql.user set plugin='' where user='root';"
+#systemctl restart mariadb
+#
+#echo "Install Composer" | tee -a "$log"
+#curl -sS https://getcomposer.org/installer -o composer-setup.php
+#php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+#rm -f composer-setup.php
+#
+#echo "Install Certbot" | tee -a "$log"
+#add-apt-repository ppa:certbot/certbot -y
+#apt-get update -y 2>> "$log"
+#apt-get install certbot -y 2>> "$log"
+#apt-get install python-certbot-nginx -y 2>> "$log"
+#
+#echo "Install Jenkins" | tee -a "$log"
+#apt-get install openjdk-8-jre -y 2>> "$log"
+#wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+#sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+#apt-get update -y 2>> "$log"
+#apt-get install jenkins -y 2>> "$log"
+#cp ./config/etc/default/jenkins /etc/default/jenkins 2>> "$log"
+#systemctl restart jenkins
+#
+#echo "Install Fail2Ban" | tee -a "$log"
+#apt-get install fail2ban -y 2>> "$log"
+#cp ./config/etc/fail2ban/jail.d/defaults-debain.conf /etc/fail2ban/jail.d/defaults-debain.conf 2>> "$log"
+#systemctl restart fail2ban
+#
+#echo "Install IP tables" | tee -a "$log"
+#apt-get install iptables -y 2>> "$log"
+#cp ./config/etc/iptables.start /etc/iptables.start 2>> "$log"
+#cp ./config/etc/init.d/firewall.sh /etc/init.d/firewall.sh 2>> "$log"
+#chmod +x /etc/iptables.start 2>> "$log"
+#chmod +x /etc/init.d/firewall.sh 2>> "$log"
+#update-rc.d firewall.sh defaults 2>> "$log"
+#service firewall.sh start
+#
+#echo "===========================================" >> "$log"
+#date +"Finished - %F %T" >> "$log"
+#echo "===========================================" >> "$log"

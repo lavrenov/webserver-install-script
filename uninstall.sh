@@ -1,15 +1,15 @@
 #!/bin/bash
 
-apt remove proftpd* --purge -y
-apt remove memcached* --purge -y
-apt remove php* --purge -y
-apt remove mariadb* --purge -y
-apt remove nginx* --purge -y
-apt remove apache* --purge -y
-apt remove certbot* --purge -y
-apt remove openjdk-8-jre --purge -y
-apt remove jenkins* --purge -y
-apt remove fail2ban* --purge -y
+apt-get remove proftpd* --purge -y
+apt-get remove memcached* --purge -y
+apt-get remove php* --purge -y
+apt-get remove mariadb* --purge -y
+apt-get remove nginx* --purge -y
+apt-get remove apache* --purge -y
+apt-get remove certbot* --purge -y
+apt-get remove openjdk-8-jre --purge -y
+apt-get remove jenkins* --purge -y
+apt-get remove fail2ban* --purge -y
 
 rm -Rf /etc/proftpd/
 rm -Rf /etc/php/
@@ -26,7 +26,7 @@ update-rc.d firewall.sh remove
 rm -f /etc/iptables.start
 rm -f /etc/init.d/firewall.sh
 
-apt autoremove
-apt autoclean
-apt clean
-apt -f install
+apt-get autoremove
+apt-get autoclean
+apt-get clean
+apt-get -f install
