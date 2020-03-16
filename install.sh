@@ -82,7 +82,7 @@ apt install python-certbot-nginx -y 2>> "$log"
 echo "Install Jenkins" | tee -a "$log"
 apt install openjdk-8-jre -y 2>> "$log"
 wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list' 2>> "$log"
+sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
 apt update -y 2>> "$log"
 apt install jenkins -y 2>> "$log"
 cp ./config/etc/default/jenkins /etc/default/jenkins 2>> "$log"
@@ -97,9 +97,9 @@ echo "Install IP tables" | tee -a "$log"
 apt install iptables -y 2>> "$log"
 cp ./config/etc/iptables.start /etc/iptables.start 2>> "$log"
 cp ./config/etc/init.d/firewall.sh /etc/init.d/firewall.sh 2>> "$log"
-chmod +x /etc/iptables.start
-chmod +x /etc/init.d/firewall.sh
-update-rc.d firewall.sh defaults
+chmod +x /etc/iptables.start 2>> "$log"
+chmod +x /etc/init.d/firewall.sh 2>> "$log"
+update-rc.d firewall.sh defaults 2>> "$log"
 service firewall.sh start
 
 echo "===========================================" >> "$log"

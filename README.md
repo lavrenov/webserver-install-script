@@ -1,5 +1,7 @@
 # Bash script to install Web Server
 
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/lavrenov/webserver-install-script?label=version)
+
 ## This script install
 
 - Apache
