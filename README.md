@@ -5,33 +5,24 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/lavrenov/webserver-install-script)
 ![GitHub last commit](https://img.shields.io/github/last-commit/lavrenov/webserver-install-script)
 
-## This script install
+## System requirements
+
+The script is tested on Ubuntu 16.04, Ubuntu 18.04
+
+## What does this script install?
 
 - Apache
 - NGINX
 - MariaDB 10.3
-- PHP 7.4 + extensions:
-    - cgi
-    - curl
-    - fpm
-    - gd
-    - gmp
-    - intl
-    - json
-    - mbstring
-    - mysql
-    - mysqli
-    - xml
-    - xmlrpc
-    - zip
-- Memcached
+- PHP 7.4 + extensions (cgi, curl, fpm, gd, gmp, intl, json, mbstring, mysql, mysqli, xml, xmlrpc, zip)
 - ProFTP
 - phpMyAdmin 5.0.1
-- Composer
 - Certbot
-- Jenkins
 - Fail2Ban
 - IP Tables
+- Memcached
+- Composer
+- Jenkins
 
 ## How this is work
 

@@ -58,9 +58,6 @@ echo "Install PHP" | tee -a "$log"
 apt-get install php7.4 php7.4-fpm php7.4-mysql php7.4-mysqli php7.4-curl php7.4-json php7.4-cgi php7.4-gd php7.4-zip php7.4-mbstring php7.4-xml php7.4-xmlrpc php7.4-gmp php7.4-intl -y 2>> "$log"
 systemctl restart php7.4-fpm 2>> "$log"
 
-echo "Install Memcached" | tee -a "$log"
-apt-get install memcached php-memcached -y 2>> "$log"
-
 echo "Install FTP" | tee -a "$log"
 apt-get install proftpd -y 2>> "$log"
 cp ./config/etc/proftpd/proftpd.conf /etc/proftpd/proftpd.conf 2>> "$log"
@@ -83,25 +80,11 @@ ln -s /usr/share/phpmyadmin /var/www/html 2>> "$log"
 mysql -e "update mysql.user set plugin='' where user='root';"
 systemctl restart mariadb
 
-echo "Install Composer" | tee -a "$log"
-curl -sS https://getcomposer.org/installer -o composer-setup.php
-php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-rm -f composer-setup.php
-
 echo "Install Certbot" | tee -a "$log"
 add-apt-repository ppa:certbot/certbot -y
 apt-get update -y 2>> "$log"
 apt-get install certbot -y 2>> "$log"
 apt-get install python-certbot-nginx -y 2>> "$log"
-
-echo "Install Jenkins" | tee -a "$log"
-apt-get install openjdk-8-jre -y 2>> "$log"
-wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-apt-get update -y 2>> "$log"
-apt-get install jenkins -y 2>> "$log"
-cp ./config/etc/default/jenkins /etc/default/jenkins 2>> "$log"
-systemctl restart jenkins
 
 echo "Install Fail2Ban" | tee -a "$log"
 apt-get install fail2ban -y 2>> "$log"
@@ -116,6 +99,23 @@ chmod +x /etc/iptables.start 2>> "$log"
 chmod +x /etc/init.d/firewall.sh 2>> "$log"
 update-rc.d firewall.sh defaults 2>> "$log"
 service firewall.sh start
+
+echo "Install Memcached" | tee -a "$log"
+apt-get install memcached php-memcached -y 2>> "$log"
+
+echo "Install Composer" | tee -a "$log"
+curl -sS https://getcomposer.org/installer -o composer-setup.php
+php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+rm -f composer-setup.php
+
+echo "Install Jenkins" | tee -a "$log"
+apt-get install openjdk-8-jre -y 2>> "$log"
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+apt-get update -y 2>> "$log"
+apt-get install jenkins -y 2>> "$log"
+cp ./config/etc/default/jenkins /etc/default/jenkins 2>> "$log"
+systemctl restart jenkins
 
 echo "===========================================" >> "$log"
 date +"Finished - %F %T" >> "$log"
