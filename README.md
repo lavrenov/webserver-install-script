@@ -1,9 +1,9 @@
 # Bash script to install Web Server
 
-![Build](https://github.com/lavrenov/webserver-install-script/workflows/Build/badge.svg)
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/lavrenov/webserver-install-script?label=version)
-![GitHub repo size](https://img.shields.io/github/repo-size/lavrenov/webserver-install-script)
-![GitHub last commit](https://img.shields.io/github/last-commit/lavrenov/webserver-install-script)
+[![Build](https://github.com/lavrenov/webserver-install-script/workflows/Build/badge.svg)](https://github.com/lavrenov/webserver-install-script)
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/lavrenov/webserver-install-script?label=version)](https://github.com/lavrenov/webserver-install-script)
+[![GitHub repo size](https://img.shields.io/github/repo-size/lavrenov/webserver-install-script)](https://github.com/lavrenov/webserver-install-script)
+[![GitHub last commit](https://img.shields.io/github/last-commit/lavrenov/webserver-install-script)](https://github.com/lavrenov/webserver-install-script/commits/master)
 
 ## System requirements
 
