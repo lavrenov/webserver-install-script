@@ -86,7 +86,21 @@ sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.
 apt update -y 2>> "$log"
 apt install jenkins -y 2>> "$log"
 cp ./config/etc/default/jenkins /etc/default/jenkins 2>> "$log"
-systemctl jenkins restart
+systemctl restart jenkins
+
+echo "Install Fail2Ban" | tee -a "$log"
+apt install fail2ban -y 2>> "$log"
+cp ./config/etc/fail2ban/jail.d/defaults-debain.conf /etc/fail2ban/jail.d/defaults-debain.conf 2>> "$log"
+systemctl restart fail2ban
+
+echo "Install IP tables" | tee -a "$log"
+apt install iptables -y 2>> "$log"
+cp ./config/etc/iptables.start /etc/iptables.start 2>> "$log"
+cp ./config/etc/init.d/firewall.sh /etc/init.d/firewall.sh 2>> "$log"
+chmod +x /etc/iptables.start
+chmod +x /etc/init.d/firewall.sh
+update-rc.d firewall.sh defaults
+service firewall.sh start
 
 echo "===========================================" >> "$log"
 date +"Finished - %F %T" >> "$log"
