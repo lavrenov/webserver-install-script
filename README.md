@@ -1,5 +1,6 @@
 # Bash script to install Web Server
 
+![Build](https://github.com/lavrenov/webserver-install-script/workflows/Build/badge.svg)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/lavrenov/webserver-install-script?label=version)
 
 ## This script install
