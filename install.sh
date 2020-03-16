@@ -35,6 +35,9 @@ cp ./config/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default 2>>
 systemctl restart nginx 2>> "$log"
 
 echo "Install MariaDB" | tee -a "$log"
+apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
+add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.ufscar.br/mariadb/repo/10.3/ubuntu bionic main'
+apt-get update -y 2>> "$log"
 apt-get install mariadb-server -y 2>> "$log"
 cp ./config/etc/mysql/conf.d/my.cnf /etc/mysql/conf.d/my.cnf 2>> "$log"
 systemctl restart mariadb
