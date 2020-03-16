@@ -1,5 +1,12 @@
 #!/bin/bash
 
+. ./etc/lsb-release
+if [[ "${DISTRIB_CODENAME}" != "bionic" ]] && [[ "${DISTRIB_CODENAME}" != "xenial" ]];
+then
+    echo "You distrib codename is not bionic or xenial"
+    exit 1
+fi
+
 log="./log.txt"
 
 echo "===========================================" >> "$log"
@@ -36,7 +43,12 @@ systemctl restart nginx 2>> "$log"
 
 echo "Install MariaDB" | tee -a "$log"
 apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
-add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.ufscar.br/mariadb/repo/10.3/ubuntu bionic main'
+if [[ "${DISTRIB_CODENAME}" == "bionic" ]];
+then
+    add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.ufscar.br/mariadb/repo/10.3/ubuntu bionic main'
+else
+    add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirrors.up.pt/pub/mariadb/repo/10.3/ubuntu xenial main'
+fi
 apt-get update -y 2>> "$log"
 apt-get install mariadb-server -y 2>> "$log"
 cp ./config/etc/mysql/conf.d/my.cnf /etc/mysql/conf.d/my.cnf 2>> "$log"
