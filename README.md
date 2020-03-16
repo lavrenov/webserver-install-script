@@ -9,7 +9,7 @@
 
 - Apache
 - NGINX
-- MariaDB 10
+- MariaDB 10.3
 - PHP 7.4 + extensions:
     - cgi
     - curl
