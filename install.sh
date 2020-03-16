@@ -27,7 +27,6 @@ rm -f /var/www/html/index.html
 rm -f /var/www/html/index.nginx-debian.html
 echo "<?php phpinfo(); ?>" > "/var/www/html/index.php"
 systemctl restart apache2 2>> "$log"
-cat "$log"
 
 #echo "Install NGINX" | tee -a "$log"
 #apt-get install nginx -y 2>> "$log"
@@ -103,6 +102,14 @@ cat "$log"
 #update-rc.d firewall.sh defaults 2>> "$log"
 #service firewall.sh start
 #
-#echo "===========================================" >> "$log"
-#date +"Finished - %F %T" >> "$log"
-#echo "===========================================" >> "$log"
+echo "===========================================" >> "$log"
+date +"Finished - %F %T" >> "$log"
+echo "===========================================" >> "$log"
+
+cat "$log"
+
+errors=`cat "$log" | grep "E:"`
+if [[ -n "${errors}" ]]; then
+  echo "Installation finished with errors"
+  exit 1
+fi
