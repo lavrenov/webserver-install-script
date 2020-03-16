@@ -7,7 +7,7 @@
 
 ## System requirements
 
-The script is tested on Ubuntu 16.04, Ubuntu 18.04
+The script is tested on Ubuntu 18.04
 
 ## What does this script install?
 

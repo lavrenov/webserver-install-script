@@ -1,9 +1,9 @@
 #!/bin/bash
 
 . /etc/lsb-release
-if [[ "${DISTRIB_CODENAME}" != "bionic" ]] && [[ "${DISTRIB_CODENAME}" != "xenial" ]];
+if [[ "${DISTRIB_CODENAME}" != "bionic" ]];
 then
-    echo "You distrib codename is not bionic or xenial"
+    echo "You distrib codename is not bionic"
     exit 1
 fi
 
