@@ -46,7 +46,9 @@ apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
 if [[ "${DISTRIB_CODENAME}" == "bionic" ]];
 then
     add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.ufscar.br/mariadb/repo/10.3/ubuntu bionic main'
-else
+fi
+if [[ "${DISTRIB_CODENAME}" == "xenial" ]];
+then
     add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirrors.up.pt/pub/mariadb/repo/10.3/ubuntu xenial main'
 fi
 apt-get update -y 2>> "$log"
