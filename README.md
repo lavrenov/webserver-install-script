@@ -28,7 +28,6 @@ The script is tested on **Ubuntu 18.04**
 1. **Install:**
     ```
     sudo ./install.sh
-    sudo mysql_secure_installation
     ```
 2. **Users**
     - Add:

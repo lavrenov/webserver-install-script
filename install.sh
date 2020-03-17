@@ -98,7 +98,6 @@ then
     BLOWFISH_SECRET=`printf '%s' "${RANDOM}" | md5sum | awk '{print $1}'`
     sed -i "s/\['blowfish_secret'\] = ''/\['blowfish_secret'\] = '${BLOWFISH_SECRET}'/g" "/usr/share/phpmyadmin/config.inc.php"
     ln -s /usr/share/phpmyadmin /var/www/html 2>> "$log"
-    mysql -e "update mysql.user set plugin='' where user='root';"
     systemctl restart mariadb
 fi
 
