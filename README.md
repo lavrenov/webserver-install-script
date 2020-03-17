@@ -7,49 +7,49 @@
 
 ## System requirements
 
-The script is tested on Ubuntu 18.04
+The script is tested on **Ubuntu 18.04**
 
 ## What does this script install?
 
-- Nginx + Apache *(Nginx for static files, Apache for dynamic files)*
-- MariaDB 10.3
-- PHP 7.4 + extensions *(cgi, curl, fpm, gd, gmp, intl, json, mbstring, mysql, mysqli, xml, xmlrpc, zip)*
-- ProFTP
-- phpMyAdmin 5.0.1 *(optional)*
-- Certbot *(optional)*
-- Fail2Ban *(optional)*
-- IP Tables *(optional)*
-- Memcached *(optional)*
-- Composer *(optional)*
-- Jenkins *(optional)*
+- **Nginx** + **Apache** *(Nginx for static files, Apache for dynamic files)*
+- **MariaDB 10.3**
+- **PHP 7.4**
+- **ProFTP**
+- **phpMyAdmin 5.0.1** *(optional)*
+- **Certbot** *(optional)*
+- **Fail2Ban** *(optional)*
+- **IP Tables** *(optional)*
+- **Memcached** *(optional)*
+- **Composer** *(optional)*
+- **Jenkins** *(optional)*
 
 ## How this is work
 
-1. Install:
+1. **Install:**
     ```
     sudo ./install.sh
     sudo mysql_secure_installation
     ```
-2. Users
-    - Add user:
+2. **Users**
+    - Add:
         ```
         sudo user.sh add [username] [password]
         ```
-    - Remove user:
+    - Remove:
         ```
         sudo user.sh remove [username]
         ```
 
-3. Sites
-    - Add site:
+3. **Sites**
+    - Add:
         ```
         sudo site.sh add [domain] [username] [separate fpm pool (y|n)
         ```
-    - Remove site:
+    - Remove:
         ```
         sudo site.sh remove [domain] [username]
         ```
-4. Uninstall:
+4. **Uninstall:**
     ```
     sudo ./uninstall.sh
     ``` 
