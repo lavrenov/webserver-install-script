@@ -33,6 +33,7 @@ apt-get update -y && apt-get upgrade -y 2>> "$log"
 apt-get install curl unzip software-properties-common apt-transport-https -y 2>> "$log"
 add-apt-repository ppa:ondrej/php -y
 apt-get update -y 2>> "$log"
+groupadd webusers 2>> "$log"
 
 echo "Install Apache" | tee -a "$log"
 apt-get install apache2 libapache2-mod-php7.4 libapache2-mod-fcgid -y 2>> "$log"

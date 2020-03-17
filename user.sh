@@ -12,6 +12,7 @@ then
     if [[ "${action}" == "add" ]];
     then
         useradd "${username}" -p "${password}" -d "${homeDir}" -m -s /bin/bash
+        usermod -aG webusers "${username}"
         uid=$(id -u "${username}")
         ugid=$(id -g "${username}")
         echo ${password} | ftpasswd --stdin --passwd --file=/etc/proftpd/ftpd.passwd --name="${username}" --uid="${uid}" --gid="${ugid}" --home="/var/www/${username}" --shell=/bin/false
@@ -30,7 +31,7 @@ then
 	    killall -u "${username}"
         userdel "${username}"
 	    ftpasswd --passwd --file=/etc/proftpd/ftpd.passwd --name="${username}" --delete-user
-	    rm -f "/etc/php/7.4/fpm/pool.d/${username}.conf"
+	    rm -f "/etc/php/7.4/fpm/pool.d/${username}*.conf"
 	    systemctl start php7.4-fpm
     fi
 else
