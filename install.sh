@@ -12,7 +12,7 @@ FORCE_INSTALL=$1
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
 then
-    echo -n "Do you want to install WebServer? (y/n): "
+    echo -n "Do you want to install WebServer? [Y/n] "
     read USER_ANSWER
     if [[ "${USER_ANSWER}" != "Y" && "${USER_ANSWER}" != "y" ]];
     then
@@ -78,7 +78,7 @@ systemctl restart proftpd 2>> "$log"
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
 then
-    echo -n "Do you want to install phpMyAdmin? (y/n): "
+    echo -n "Do you want to install phpMyAdmin? [Y/n] "
     read USER_ANSWER
 else
     USER_ANSWER="Y"
@@ -95,6 +95,8 @@ then
     mkdir /usr/share/phpmyadmin/tmp 2>> "$log"
     chmod 777 /usr/share/phpmyadmin/tmp 2>> "$log"
     cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php 2>> "$log"
+    BLOWFISH_SECRET=`printf '%s' "${RANDOM}" | md5sum | awk '{print $1}'`
+    sed -i "s/\['blowfish_secret'\] = ''/\['blowfish_secret'\] = '${BLOWFISH_SECRET}'/g" "/usr/share/phpmyadmin/config.inc.php"
     ln -s /usr/share/phpmyadmin /var/www/html 2>> "$log"
     mysql -e "update mysql.user set plugin='' where user='root';"
     systemctl restart mariadb
@@ -102,7 +104,7 @@ fi
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
 then
-    echo -n "Do you want to install Certbot? (y/n): "
+    echo -n "Do you want to install Certbot? [Y/n] "
     read USER_ANSWER
 else
     USER_ANSWER="Y"
@@ -118,7 +120,7 @@ fi
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
 then
-    echo -n "Do you want to install Fail2Ban? (y/n): "
+    echo -n "Do you want to install Fail2Ban? [Y/n] "
     read USER_ANSWER
 else
     USER_ANSWER="Y"
@@ -133,7 +135,7 @@ fi
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
 then
-    echo -n "Do you want to install IP Tables? (y/n): "
+    echo -n "Do you want to install IP Tables? [Y/n] "
     read USER_ANSWER
 else
     USER_ANSWER="Y"
@@ -152,7 +154,7 @@ fi
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
 then
-    echo -n "Do you want to install Memcached? (y/n): "
+    echo -n "Do you want to install Memcached? [Y/n] "
     read USER_ANSWER
 else
     USER_ANSWER="Y"
@@ -165,7 +167,7 @@ fi
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
 then
-    echo -n "Do you want to install Composer? (y/n): "
+    echo -n "Do you want to install Composer? [Y/n] "
     read USER_ANSWER
 else
     USER_ANSWER="Y"
@@ -180,7 +182,7 @@ fi
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
 then
-    echo -n "Do you want to install Jenkins? (y/n): "
+    echo -n "Do you want to install Jenkins? [Y/n] "
     read USER_ANSWER
 else
     USER_ANSWER="Y"
