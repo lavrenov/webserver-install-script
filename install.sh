@@ -3,8 +3,23 @@
 . /etc/lsb-release
 if [[ "${DISTRIB_CODENAME}" != "bionic" ]];
 then
-    echo "You distrib codename is not bionic"
+    echo "Your OS is not Ubuntu 18"
+    sleep 1
     exit 1
+fi
+
+FORCE_INSTALL=$1
+
+if [[ "${FORCE_INSTALL}" != "-f" ]];
+then
+    echo -n "Do you want to install WebServer? (y/n): "
+    read USER_ANSWER
+    if [[ "${USER_ANSWER}" != "Y" && "${USER_ANSWER}" != "y" ]];
+    then
+        echo "Bye-bye"
+        sleep 1
+        exit 0
+    fi
 fi
 
 log="./log.txt"
@@ -43,14 +58,7 @@ systemctl restart nginx 2>> "$log"
 
 echo "Install MariaDB" | tee -a "$log"
 apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc' -y
-if [[ "${DISTRIB_CODENAME}" == "bionic" ]];
-then
-    add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.ufscar.br/mariadb/repo/10.3/ubuntu bionic main' -y
-fi
-if [[ "${DISTRIB_CODENAME}" == "xenial" ]];
-then
-    add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirrors.up.pt/pub/mariadb/repo/10.3/ubuntu xenial main' -y
-fi
+add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.ufscar.br/mariadb/repo/10.3/ubuntu bionic main' -y
 apt-get update -y 2>> "$log"
 apt-get install mariadb-server -y 2>> "$log"
 cp ./config/etc/mysql/conf.d/my.cnf /etc/mysql/conf.d/my.cnf 2>> "$log"
@@ -68,56 +76,126 @@ touch /etc/proftpd/ftpd.passwd
 chmod o-rwx /etc/proftpd/ftpd.passwd
 systemctl restart proftpd 2>> "$log"
 
-echo "Install phpMyAdmin" | tee -a "$log"
-wget https://files.phpmyadmin.net/phpMyAdmin/5.0.1/phpMyAdmin-5.0.1-all-languages.tar.gz
-tar xzf phpMyAdmin-5.0.1-all-languages.tar.gz 2>> "$log"
-mkdir /usr/share/phpmyadmin 2>> "$log"
-mv phpMyAdmin-5.0.1-all-languages/* /usr/share/phpmyadmin 2>> "$log"
-rm phpMyAdmin-5.0.1-all-languages.tar.gz 2>> "$log"
-rm -rf phpMyAdmin-5.0.1-all-languages 2>> "$log"
-mkdir /usr/share/phpmyadmin/tmp 2>> "$log"
-chmod 777 /usr/share/phpmyadmin/tmp 2>> "$log"
-cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php 2>> "$log"
-ln -s /usr/share/phpmyadmin /var/www/html 2>> "$log"
-mysql -e "update mysql.user set plugin='' where user='root';"
-systemctl restart mariadb
+if [[ "${FORCE_INSTALL}" != "-f" ]];
+then
+    echo -n "Do you want to install phpMyAdmin? (y/n): "
+    read USER_ANSWER
+else
+    USER_ANSWER="Y"
+fi
+if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
+then
+    echo "Install phpMyAdmin" | tee -a "$log"
+    wget https://files.phpmyadmin.net/phpMyAdmin/5.0.1/phpMyAdmin-5.0.1-all-languages.tar.gz
+    tar xzf phpMyAdmin-5.0.1-all-languages.tar.gz 2>> "$log"
+    mkdir /usr/share/phpmyadmin 2>> "$log"
+    mv phpMyAdmin-5.0.1-all-languages/* /usr/share/phpmyadmin 2>> "$log"
+    rm phpMyAdmin-5.0.1-all-languages.tar.gz 2>> "$log"
+    rm -rf phpMyAdmin-5.0.1-all-languages 2>> "$log"
+    mkdir /usr/share/phpmyadmin/tmp 2>> "$log"
+    chmod 777 /usr/share/phpmyadmin/tmp 2>> "$log"
+    cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php 2>> "$log"
+    ln -s /usr/share/phpmyadmin /var/www/html 2>> "$log"
+    mysql -e "update mysql.user set plugin='' where user='root';"
+    systemctl restart mariadb
+fi
 
-echo "Install Certbot" | tee -a "$log"
-add-apt-repository ppa:certbot/certbot -y
-apt-get update -y 2>> "$log"
-apt-get install certbot -y 2>> "$log"
-apt-get install python-certbot-nginx -y 2>> "$log"
+if [[ "${FORCE_INSTALL}" != "-f" ]];
+then
+    echo -n "Do you want to install Certbot? (y/n): "
+    read USER_ANSWER
+else
+    USER_ANSWER="Y"
+fi
+if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
+then
+    echo "Install Certbot" | tee -a "$log"
+    add-apt-repository ppa:certbot/certbot -y
+    apt-get update -y 2>> "$log"
+    apt-get install certbot -y 2>> "$log"
+    apt-get install python-certbot-nginx -y 2>> "$log"
+fi
 
-echo "Install Fail2Ban" | tee -a "$log"
-apt-get install fail2ban -y 2>> "$log"
-cp ./config/etc/fail2ban/jail.d/defaults-debain.conf /etc/fail2ban/jail.d/defaults-debain.conf 2>> "$log"
-systemctl restart fail2ban
+if [[ "${FORCE_INSTALL}" != "-f" ]];
+then
+    echo -n "Do you want to install Fail2Ban? (y/n): "
+    read USER_ANSWER
+else
+    USER_ANSWER="Y"
+fi
+if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
+then
+    echo "Install Fail2Ban" | tee -a "$log"
+    apt-get install fail2ban -y 2>> "$log"
+    cp ./config/etc/fail2ban/jail.d/defaults-debain.conf /etc/fail2ban/jail.d/defaults-debain.conf 2>> "$log"
+    systemctl restart fail2ban
+fi
 
-echo "Install IP tables" | tee -a "$log"
-apt-get install iptables -y 2>> "$log"
-cp ./config/etc/iptables.start /etc/iptables.start 2>> "$log"
-cp ./config/etc/init.d/firewall.sh /etc/init.d/firewall.sh 2>> "$log"
-chmod +x /etc/iptables.start 2>> "$log"
-chmod +x /etc/init.d/firewall.sh 2>> "$log"
-update-rc.d firewall.sh defaults 2>> "$log"
-service firewall.sh start
+if [[ "${FORCE_INSTALL}" != "-f" ]];
+then
+    echo -n "Do you want to install IP Tables? (y/n): "
+    read USER_ANSWER
+else
+    USER_ANSWER="Y"
+fi
+if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
+then
+    echo "Install IP Tables" | tee -a "$log"
+    apt-get install iptables -y 2>> "$log"
+    cp ./config/etc/iptables.start /etc/iptables.start 2>> "$log"
+    cp ./config/etc/init.d/firewall.sh /etc/init.d/firewall.sh 2>> "$log"
+    chmod +x /etc/iptables.start 2>> "$log"
+    chmod +x /etc/init.d/firewall.sh 2>> "$log"
+    update-rc.d firewall.sh defaults 2>> "$log"
+    service firewall.sh start
+fi
 
-echo "Install Memcached" | tee -a "$log"
-apt-get install memcached php-memcached -y 2>> "$log"
+if [[ "${FORCE_INSTALL}" != "-f" ]];
+then
+    echo -n "Do you want to install Memcached? (y/n): "
+    read USER_ANSWER
+else
+    USER_ANSWER="Y"
+fi
+if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
+then
+    echo "Install Memcached" | tee -a "$log"
+    apt-get install memcached php-memcached -y 2>> "$log"
+fi
 
-echo "Install Composer" | tee -a "$log"
-curl -sS https://getcomposer.org/installer -o composer-setup.php
-php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-rm -f composer-setup.php
+if [[ "${FORCE_INSTALL}" != "-f" ]];
+then
+    echo -n "Do you want to install Composer? (y/n): "
+    read USER_ANSWER
+else
+    USER_ANSWER="Y"
+fi
+if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
+then
+    echo "Install Composer" | tee -a "$log"
+    curl -sS https://getcomposer.org/installer -o composer-setup.php
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    rm -f composer-setup.php
+fi
 
-echo "Install Jenkins" | tee -a "$log"
-apt-get install openjdk-8-jre -y 2>> "$log"
-wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-apt-get update -y 2>> "$log"
-apt-get install jenkins -y 2>> "$log"
-cp ./config/etc/default/jenkins /etc/default/jenkins 2>> "$log"
-systemctl restart jenkins
+if [[ "${FORCE_INSTALL}" != "-f" ]];
+then
+    echo -n "Do you want to install Jenkins? (y/n): "
+    read USER_ANSWER
+else
+    USER_ANSWER="Y"
+fi
+if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
+then
+    echo "Install Jenkins" | tee -a "$log"
+    apt-get install openjdk-8-jre -y 2>> "$log"
+    wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+    sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+    apt-get update -y 2>> "$log"
+    apt-get install jenkins -y 2>> "$log"
+    cp ./config/etc/default/jenkins /etc/default/jenkins 2>> "$log"
+    systemctl restart jenkins
+fi
 
 echo "===========================================" >> "$log"
 date +"Finished - %F %T" >> "$log"

@@ -16,13 +16,13 @@ The script is tested on Ubuntu 18.04
 - MariaDB 10.3
 - PHP 7.4 + extensions (cgi, curl, fpm, gd, gmp, intl, json, mbstring, mysql, mysqli, xml, xmlrpc, zip)
 - ProFTP
-- phpMyAdmin 5.0.1
-- Certbot
-- Fail2Ban
-- IP Tables
-- Memcached
-- Composer
-- Jenkins
+- phpMyAdmin 5.0.1 *(optional)*
+- Certbot *(optional)*
+- Fail2Ban *(optional)*
+- IP Tables *(optional)*
+- Memcached *(optional)*
+- Composer *(optional)*
+- Jenkins *(optional)*
 
 ## How this is work
 
