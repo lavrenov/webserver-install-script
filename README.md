@@ -11,10 +11,9 @@ The script is tested on Ubuntu 18.04
 
 ## What does this script install?
 
-- Apache
-- NGINX
+- Nginx + Apache *(Nginx for static files, Apache for dynamic files)*
 - MariaDB 10.3
-- PHP 7.4 + extensions (cgi, curl, fpm, gd, gmp, intl, json, mbstring, mysql, mysqli, xml, xmlrpc, zip)
+- PHP 7.4 + extensions *(cgi, curl, fpm, gd, gmp, intl, json, mbstring, mysql, mysqli, xml, xmlrpc, zip)*
 - ProFTP
 - phpMyAdmin 5.0.1 *(optional)*
 - Certbot *(optional)*
