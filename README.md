@@ -29,26 +29,16 @@ The script is tested on **Ubuntu 18.04**
     ```
     sudo ./install.sh
     ```
-2. **Users**
-    - Add:
-        ```
-        sudo user.sh add [username] [password]
-        ```
-    - Remove:
-        ```
-        sudo user.sh remove [username]
-        ```
+    
+2. **Users** and **Sites**
 
-3. **Sites**
-    - Add:
-        ```
-        sudo site.sh add [domain] [username] [separate fpm pool (y|n)
-        ```
-    - Remove:
-        ```
-        sudo site.sh remove [domain] [username]
-        ```
-4. **Uninstall:**
+    For add or remove user or site launch script and follow instructions
+
+    ```
+    sudo ./menu.sh
+    ```
+    
+3. **Uninstall:**
     ```
     sudo ./uninstall.sh
     ``` 
