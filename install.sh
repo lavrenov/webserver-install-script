@@ -47,7 +47,6 @@ a2enmod mpm_prefork 2>> "$log"
 a2enmod php7.4 setenvif actions fcgid alias proxy_fcgi remoteip rewrite headers 2>> "$log"
 chown -R www-data:www-data /var/www 2>> "$log"
 rm -f /var/www/html/index.html
-rm -f /var/www/html/index.nginx-debian.html
 echo "<?php phpinfo(); ?>" > "/var/www/html/index.php"
 systemctl restart apache2 2>> "$log"
 
@@ -55,6 +54,7 @@ echo "Install NGINX" | tee -a "$log"
 apt-get install nginx -y 2>> "$log"
 cp ./config/etc/nginx/nginx.conf /etc/nginx/nginx.conf 2>> "$log"
 cp ./config/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default 2>> "$log"
+rm -f /var/www/html/index.nginx-debian.html
 systemctl restart nginx 2>> "$log"
 
 echo "Install MariaDB" | tee -a "$log"
