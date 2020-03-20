@@ -22,6 +22,7 @@ The script is tested on **Ubuntu 18.04**
 - **Memcached** *(optional)*
 - **Composer** *(optional)*
 - **Jenkins** *(optional)*
+- **AWS CLI** *(optional)*
 
 ## How this is work
 

@@ -25,6 +25,9 @@ service firewall.sh stop
 update-rc.d firewall.sh remove
 rm -f /etc/iptables.start
 rm -f /etc/init.d/firewall.sh
+rm /usr/local/bin/aws
+rm /usr/local/bin/aws2_completer
+rm -rf /usr/local/aws-cli
 
 apt-get autoremove
 apt-get autoclean
