@@ -1,15 +1,28 @@
 #!/bin/bash
 
-USERNAME=$1
+# MySQL
 DB_USER=
 DB_PASS=
-DATE=`date +%Y-%m-%d_%H-%M-%S`
-BACKUP_USER_DIR=/backup/${USERNAME}
-BACKUP_DATE_DIR=${BACKUP_USER_DIR}/${DATE}
+
+# www directory
+WWW_DIR=/var/www
+
+# backup directory
+BACKUP_DIR=/backup
+
+# Backup count to store
 BACKUP_COUNT=30
+
+# S3
+BUCKET=
+ENDPOINT_URL=
+
+USERNAME=$1
+DATE=`date +%Y-%m-%d_%H-%M-%S`
+BACKUP_USER_DIR=${BACKUP_DIR}/${USERNAME}
+BACKUP_DATE_DIR=${BACKUP_USER_DIR}/${DATE}
 DATABASE_LIST=/tmp/databases.list
 SITES_LIST=/tmp/sites.list
-WWW_DIR=/var/www
 
 if [[ -n "${USERNAME}" ]];
 then
@@ -49,6 +62,11 @@ then
     chown ${USERNAME}:${USERNAME} ${BACKUP_USER_DIR}
 
     find "${BACKUP_USER_DIR}" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rnk1 | awk 'NR>'"${BACKUP_COUNT}"' { sub(/^\S+ /, "", $0); system("rm -r -f \"" $0 "\"")}'
+
+    if [[ -n "${BUCKET}" ]] && [[ -n "${ENDPOINT_URL}" ]];
+    then
+        aws s3 cp ${BACKUP_DATE_DIR} s3://${BUCKET}/backup/${USERNAME}/${DATE} --recursive --quiet --endpoint-url ${ENDPOINT_URL}
+    fi
 else
     echo "Required parameters not entered (backup.sh [username])"
 fi
