@@ -11,7 +11,7 @@ WWW_DIR=/var/www
 BACKUP_DIR=/backup
 
 # Backup count to store
-BACKUP_COUNT=30
+BACKUP_COUNT=7
 
 # S3
 BUCKET=
@@ -65,7 +65,7 @@ then
 
     if [[ -n "${BUCKET}" ]] && [[ -n "${ENDPOINT_URL}" ]];
     then
-        aws s3 cp ${BACKUP_DATE_DIR} s3://${BUCKET}/backup/${USERNAME}/${DATE} --recursive --quiet --endpoint-url ${ENDPOINT_URL}
+        /usr/local/bin/aws s3 cp ${BACKUP_DATE_DIR} "s3://${BUCKET}/backup/${USERNAME}/${DATE}" --recursive --quiet --endpoint-url ${ENDPOINT_URL}
     fi
 else
     echo "Required parameters not entered (backup.sh [username])"
