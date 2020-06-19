@@ -48,16 +48,18 @@ $IPTABLES -t filter -A INPUT -p tcp --dport 8888 -j ACCEPT
 $IPTABLES -t filter -A OUTPUT -p tcp --dport 8888 -j ACCEPT
 
 # Mail SMTP
-$IPTABLES -t filter -A INPUT -p tcp --dport 25 -j ACCEPT
-$IPTABLES -t filter -A OUTPUT -p tcp --dport 25 -j ACCEPT
+$IPTABLES -t filter -A INPUT -p tcp --dport 465 -j ACCEPT
+$IPTABLES -t filter -A OUTPUT -p tcp --dport 465 -j ACCEPT
+$IPTABLES -t filter -A INPUT -p tcp --dport 587 -j ACCEPT
+$IPTABLES -t filter -A OUTPUT -p tcp --dport 587 -j ACCEPT
 
 # Mail POP3
-$IPTABLES -t filter -A INPUT -p tcp --dport 110 -j ACCEPT
-$IPTABLES -t filter -A OUTPUT -p tcp --dport 110 -j ACCEPT
+$IPTABLES -t filter -A INPUT -p tcp --dport 995 -j ACCEPT
+$IPTABLES -t filter -A OUTPUT -p tcp --dport 995 -j ACCEPT
 
 # Mail IMAP
-$IPTABLES -t filter -A INPUT -p tcp --dport 143 -j ACCEPT
-$IPTABLES -t filter -A OUTPUT -p tcp --dport 143 -j ACCEPT
+$IPTABLES -t filter -A INPUT -p tcp --dport 993 -j ACCEPT
+$IPTABLES -t filter -A OUTPUT -p tcp --dport 993 -j ACCEPT
 
 # NTP (server time)
 $IPTABLES -t filter -A OUTPUT -p udp --dport 123 -j ACCEPT
