@@ -183,25 +183,6 @@ fi
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
 then
-    echo -n "Do you want to install Jenkins? [Y/n] "
-    read USER_ANSWER
-else
-    USER_ANSWER="Y"
-fi
-if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
-then
-    echo "Install Jenkins" | tee -a "$log"
-    apt-get install openjdk-8-jre -y 2>> "$log"
-    wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-    sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-    apt-get update -y 2>> "$log"
-    apt-get install jenkins -y 2>> "$log"
-    cp ./config/etc/default/jenkins /etc/default/jenkins 2>> "$log"
-    systemctl restart jenkins
-fi
-
-if [[ "${FORCE_INSTALL}" != "-f" ]];
-then
     echo -n "Do you want to install AWS CLI? [Y/n] "
     read USER_ANSWER
 else
