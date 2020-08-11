@@ -43,10 +43,6 @@ $IPTABLES -t filter -A OUTPUT -p tcp --dport 20:21 -j ACCEPT
 $IPTABLES -t filter -A INPUT -p tcp --dport 40900:40999 -j ACCEPT
 $IPTABLES -t filter -A OUTPUT -p tcp --dport 40900:40999 -j ACCEPT
 
-# Jenkins
-$IPTABLES -t filter -A INPUT -p tcp --dport 8888 -j ACCEPT
-$IPTABLES -t filter -A OUTPUT -p tcp --dport 8888 -j ACCEPT
-
 # Mail SMTP
 $IPTABLES -t filter -A INPUT -p tcp --dport 465 -j ACCEPT
 $IPTABLES -t filter -A OUTPUT -p tcp --dport 465 -j ACCEPT
