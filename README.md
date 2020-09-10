@@ -37,6 +37,22 @@ The script is tested on **Ubuntu 18.04**
     ```
     sudo ./menu.sh
     ```
+
+3. **Firewall usage**   
+
+    ```
+    /etc/init.d/firewall.sh {start|stop|restart}
+    ```
+    
+    Config file path /etc/iptables.start
+    
+4. **Certbot**
+
+    launch script and follow instructions
+
+    ```
+    Cerbot
+    ```
     
 3. **Uninstall:**
     ```
