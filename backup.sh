@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# MySQL
-DB_USER=
-DB_PASS=
+# Username
+USERNAME=$1
 
 # www directory
 WWW_DIR=/var/www
 
-# backup directory
-BACKUP_DIR=/backup
+# MySQL
+DB_USER=root
+DB_PASS=
 
 # Backup count to store
 BACKUP_COUNT=7
@@ -17,56 +17,50 @@ BACKUP_COUNT=7
 BUCKET=
 ENDPOINT_URL=
 
-USERNAME=$1
-DATE=`date +%Y-%m-%d_%H-%M-%S`
-BACKUP_USER_DIR=${BACKUP_DIR}/${USERNAME}
-BACKUP_DATE_DIR=${BACKUP_USER_DIR}/${DATE}
-DATABASE_LIST=/tmp/databases.list
-SITES_LIST=/tmp/sites.list
-
 if [[ -n "${USERNAME}" ]];
 then
-    mkdir -p ${BACKUP_DATE_DIR}/${USERNAME}/sql
-    mkdir -p ${BACKUP_DATE_DIR}/${USERNAME}/ssl
-    mkdir -p ${BACKUP_DATE_DIR}/${USERNAME}/configs/apache2
-    mkdir -p ${BACKUP_DATE_DIR}/${USERNAME}/configs/nginx
-    mkdir -p ${BACKUP_DATE_DIR}/${USERNAME}/configs/php7.4-fpm
+    DATE=`date +%Y-%m-%d_%H-%M-%S`
+    BACKUP_USER_DIR=${WWW_DIR}/${USERNAME}/backups
+    BACKUP_DATE_DIR=${BACKUP_USER_DIR}/${DATE}
+    BACKUP_LIST=${WWW_DIR}/${USERNAME}/backup.list
 
-    cp -aRL ${WWW_DIR}/${USERNAME}/. ${BACKUP_DATE_DIR}/${USERNAME}
-    cp -aRL /etc/php/7.4/fpm/pool.d/${USERNAME}.conf ${BACKUP_DATE_DIR}/${USERNAME}/configs/php7.4-fpm/${USERNAME}.conf 2>/dev/null || :
-
-    ls ${WWW_DIR}/${USERNAME} | grep -v php > ${SITES_LIST}
-    for site in `cat ${SITES_LIST}`
+    for backup in `cat ${BACKUP_LIST}`
     do
-        cp -aRL /etc/letsencrypt/live/${site} ${BACKUP_DATE_DIR}/${USERNAME}/ssl 2>/dev/null || :
-        cp -aRL /etc/apache2/sites-enabled/${site}.conf ${BACKUP_DATE_DIR}/${USERNAME}/configs/apache2/${site}.conf 2>/dev/null || :
-        cp -aRL /etc/nginx/sites-enabled/${site}.conf ${BACKUP_DATE_DIR}/${USERNAME}/configs/nginx/${site}.conf 2>/dev/null || :
-        cp -aRL /etc/php/7.4/fpm/pool.d/${USERNAME}_${site}.conf ${BACKUP_DATE_DIR}/${USERNAME}/configs/php7.4-fpm/${USERNAME}_${site}.conf 2>/dev/null || :
+        IFS='=' read -ra site <<< "${backup}"
+
+        mkdir -p ${BACKUP_DATE_DIR}/${site[0]}
+        cp -aRL ${WWW_DIR}/${USERNAME}/${site[0]} ${BACKUP_DATE_DIR} 2>/dev/null || :
+        rm -Rf ${BACKUP_DATE_DIR}/${site[0]}/log
+        rm -Rf ${BACKUP_DATE_DIR}/${site[0]}/tmp
+
+        mkdir -p ${BACKUP_DATE_DIR}/${site[0]}/configs/apache2
+        cp -aRL /etc/apache2/sites-enabled/${site[0]}.conf ${BACKUP_DATE_DIR}/${site[0]}/configs/apache2/${site[0]}.conf 2>/dev/null || :
+
+        mkdir -p ${BACKUP_DATE_DIR}/${site[0]}/configs/nginx
+        cp -aRL /etc/nginx/sites-enabled/${site[0]}.conf ${BACKUP_DATE_DIR}/${site[0]}/configs/nginx/${site[0]}.conf 2>/dev/null || :
+
+        mkdir -p ${BACKUP_DATE_DIR}/${site[0]}/configs/php7.4-fpm
+        cp -aRL /etc/php/7.4/fpm/pool.d/${USERNAME}_${site[0]}.conf ${BACKUP_DATE_DIR}/${site[0]}/configs/php7.4-fpm/${USERNAME}_${site[0]}.conf 2>/dev/null || :
+
+	    if [[ -n "${site[1]}" ]];
+        then
+            mkdir -p ${BACKUP_DATE_DIR}/${site[0]}/sql
+            mysqldump -u${DB_USER} -p${DB_PASS} ${site[1]} > ${BACKUP_DATE_DIR}/${site[0]}/sql/${site[1]}.sql
+        fi
+
+        cd ${BACKUP_DATE_DIR}
+        tar -zcf ${site[0]}.tar.gz ${site[0]}
+        rm -Rf ${site[0]}
+
+	    find "${BACKUP_USER_DIR}" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rnk1 | awk 'NR>'"${BACKUP_COUNT}"' { sub(/^\S+ /, "", $0); system("rm -r -f \"" $0 "\"")}'
+
+        if [[ -n "${BUCKET}" ]] && [[ -n "${ENDPOINT_URL}" ]];
+        then
+            /usr/local/bin/aws s3 cp ${BACKUP_DATE_DIR} "s3://${BUCKET}/backup/${USERNAME}/${DATE}" --recursive --quiet --endpoint-url ${ENDPOINT_URL}
+        fi
     done
 
-    mysql -u ${DB_USER} -p${DB_PASS} -e "show databases;" | grep "${USERNAME}_*" > ${DATABASE_LIST}
-    for database in `cat ${DATABASE_LIST}`
-    do
-        mysqldump -u ${DB_USER} -p${DB_PASS} ${database} > ${BACKUP_DATE_DIR}/${USERNAME}/sql/${database}.sql
-    done
-
-    chown -R ${USERNAME}:${USERNAME} ${BACKUP_DATE_DIR}
-    rm -Rf ${BACKUP_DATE_DIR}/${USERNAME}/php
-    cd ${BACKUP_DATE_DIR}
-    tar -zcf ${DATE}.tar.gz ${USERNAME}
-    rm -Rf ${USERNAME}
-    rm -f ${DATABASE_LIST}
-    rm -f ${SITES_LIST}
-    split -b 50M ${DATE}.tar.gz "${DATE}.tar.gz.part_"
-    rm -f ${DATE}.tar.gz
-    chown ${USERNAME}:${USERNAME} ${BACKUP_USER_DIR}
-
-    find "${BACKUP_USER_DIR}" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rnk1 | awk 'NR>'"${BACKUP_COUNT}"' { sub(/^\S+ /, "", $0); system("rm -r -f \"" $0 "\"")}'
-
-    if [[ -n "${BUCKET}" ]] && [[ -n "${ENDPOINT_URL}" ]];
-    then
-        /usr/local/bin/aws s3 cp ${BACKUP_DATE_DIR} "s3://${BUCKET}/backup/${USERNAME}/${DATE}" --recursive --quiet --endpoint-url ${ENDPOINT_URL}
-    fi
+    chown -R ${USERNAME}:${USERNAME} ${BACKUP_USER_DIR}
 else
     echo "Required parameters not entered (backup.sh [username])"
 fi
