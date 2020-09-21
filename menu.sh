@@ -110,7 +110,8 @@ then
             NGINX_SITE_DIR="/etc/nginx/sites-enabled/"
             APACHE_SITE_DIR="/etc/apache2/sites-enabled/"
             PHPFPMPOOL_CONF="/etc/php/7.4/fpm/pool.d/${USERNAME}_${DOMAIN}.conf"
-            HOME_DIR="/var/www/${USERNAME}/"
+            HOME_DIR="/var/www/${USERNAME}"
+            SITE_DIR="${HOME_DIR}/sites/${DOMAIN}"
 
             cp -i ./config/template/nginx.http.conf "${NGINX_SITE_DIR}${DOMAIN}.conf"
             sed -i "s/%DOMAIN%/${DOMAIN}/g" "${NGINX_SITE_DIR}${DOMAIN}.conf"
@@ -120,15 +121,15 @@ then
             sed -i "s/%DOMAIN%/${DOMAIN}/g" "${APACHE_SITE_DIR}${DOMAIN}.conf"
             sed -i "s/%USERNAME%/${USERNAME}/g" "${APACHE_SITE_DIR}${DOMAIN}.conf"
 
-            mkdir -p "${HOME_DIR}${DOMAIN}/www"
-            mkdir -p "${HOME_DIR}${DOMAIN}/tmp"
-            mkdir -p "${HOME_DIR}${DOMAIN}/log/nginx"
-            mkdir -p "${HOME_DIR}${DOMAIN}/log/apache"
+            mkdir -p "${SITE_DIR}/www"
+            mkdir -p "${SITE_DIR}/tmp"
+            mkdir -p "${SITE_DIR}/log/nginx"
+            mkdir -p "${SITE_DIR}/log/apache"
 
-            echo "<?php echo \"<h1>${DOMAIN}</h1>\"; ?>" > "${HOME_DIR}${DOMAIN}/www/index.php"
+            echo "<?php echo \"<h1>${DOMAIN}</h1>\"; ?>" > "${SITE_DIR}/www/index.php"
 
-            chown -R "${USERNAME}":"${USERNAME}" "${HOME_DIR}${DOMAIN}"
-            chmod -R 775 "${HOME_DIR}${DOMAIN}"
+            chown -R "${USERNAME}":"${USERNAME}" "${SITE_DIR}"
+            chmod -R 775 "${SITE_DIR}"
 
             echo -n "Create a separate php-fpm pool config for site? [Y/n] "
             read SEPARATE_POOL
@@ -161,11 +162,12 @@ then
 		select USERNAME in `members --all webusers`
 		do
 		    HOME_DIR="/var/www/${USERNAME}"
+		    SITES_DIR="${HOME_DIR}/sites/"
 
 		    echo
             echo 'Select site'
             PS3='Your choose: '
-		    select DOMAIN in `ls ${HOME_DIR} | grep -v "php"`
+		    select DOMAIN in `ls ${SITES_DIR}`
 		    do
 		        echo
                 echo -n "Do you want remove site: \"${DOMAIN}\"? [Y/n] "
@@ -175,17 +177,17 @@ then
                     NGINX_SITE_DIR="/etc/nginx/sites-enabled/"
                     APACHE_SITE_DIR="/etc/apache2/sites-enabled/"
                     PHPFPMPOOL_CONF="/etc/php/7.4/fpm/pool.d/${USERNAME}_${DOMAIN}.conf"
-                    HOME_DIR="/var/www/${USERNAME}/"
+                    SITE_DIR="${SITES_DIR}${DOMAIN}"
 
 		            rm -f "${NGINX_SITE_DIR}${DOMAIN}.conf"
                     rm -f "${APACHE_SITE_DIR}${DOMAIN}.conf"
                     rm -f "${PHPFPMPOOL_CONF}"
 
-                    echo -n "Do you want remove site dir: \"${HOME_DIR}${DOMAIN}\"? [Y/n] "
+                    echo -n "Do you want remove site dir: \"${SITE_DIR}\"? [Y/n] "
                     read REMOVE_SITE_DIR
                     if [[ "${REMOVE_SITE_DIR}" == "Y" || "${REMOVE_SITE_DIR}" == "y" ]];
                     then
-                        rm -Rf "${HOME_DIR}${DOMAIN}"
+                        rm -Rf "${SITE_DIR}"
                     fi
 
                     systemctl restart php7.4-fpm
