@@ -198,6 +198,15 @@ then
     rm -f awscliv2.zip
 fi
 
+SETTINGS_FILE="./settings"
+rm -rf ${SETTINGS_FILE}
+echo "WWW_DIR=/var/www" >> ${SETTINGS_FILE}
+echo "DB_USER=root" >> ${SETTINGS_FILE}
+echo "DB_PASS=" >> ${SETTINGS_FILE}
+echo "BACKUP_COUNT=7" >> ${SETTINGS_FILE}
+echo "BUCKET=" >> ${SETTINGS_FILE}
+echo "ENDPOINT_URL=" >> ${SETTINGS_FILE}
+
 echo "===========================================" >> "$log"
 date +"Finished - %F %T" >> "$log"
 echo "===========================================" >> "$log"
@@ -206,6 +215,6 @@ cat "$log"
 
 errors=`cat "$log" | grep "E:"`
 if [[ -n "${errors}" ]]; then
-  echo "Installation finished with errors"
-  exit 1
+    echo "Installation finished with errors"
+    exit 1
 fi
