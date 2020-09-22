@@ -238,9 +238,9 @@ then
 		do
             select DATABASE in `mysql -u${DB_USER} -p${DB_PASS} -e "show databases" | tr -d "| " | grep ${USERNAME}_`
 		    do
-                mysql -uroot -e "DROP DATABASE IF EXISTS ${DATABASE};"
-                mysql -uroot -e "DROP USER IF EXISTS '${DATABASE}'@'localhost';"
-                mysql -uroot -e "FLUSH PRIVILEGES;"
+                mysql -u${DB_USER} -p${DB_PASS} -e "DROP DATABASE IF EXISTS ${DATABASE};"
+                mysql -u${DB_USER} -p${DB_PASS} -e "DROP USER IF EXISTS '${DATABASE}'@'localhost';"
+                mysql -u${DB_USER} -p${DB_PASS} -e "FLUSH PRIVILEGES;"
 
 		        break
 		    done
