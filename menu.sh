@@ -244,9 +244,15 @@ then
             PS3='Your choose: '
             select DATABASE in `mysql -u${DB_USER} -p${DB_PASS} -e "show databases" | tr -d "| " | grep ${USERNAME}_`
 		    do
-                mysql -u${DB_USER} -p${DB_PASS} -e "DROP DATABASE IF EXISTS ${DATABASE};"
-                mysql -u${DB_USER} -p${DB_PASS} -e "DROP USER IF EXISTS '${DATABASE}'@'localhost';"
-                mysql -u${DB_USER} -p${DB_PASS} -e "FLUSH PRIVILEGES;"
+		        echo
+                echo -n "Do you want remove database: \"${DATABASE}\"? [Y/n] "
+                read CONFIRM
+                if [[ "${CONFIRM}" == "Y" || "${CONFIRM}" == "y" ]];
+                then
+                    mysql -u${DB_USER} -p${DB_PASS} -e "DROP DATABASE IF EXISTS ${DATABASE};"
+                    mysql -u${DB_USER} -p${DB_PASS} -e "DROP USER IF EXISTS '${DATABASE}'@'localhost';"
+                    mysql -u${DB_USER} -p${DB_PASS} -e "FLUSH PRIVILEGES;"
+                fi
 
 		        break
 		    done
