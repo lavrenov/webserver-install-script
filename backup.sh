@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. settings
+. $(dirname "$0")/settings
 
 for USERNAME in `members --all webusers`
 do
