@@ -1,9 +1,11 @@
 #!/bin/bash
 
+. $(dirname "$0")/settings
+
 echo
 echo 'Select controller'
 PS3='Your choose: '
-select CONTROLLER in "user" "site"
+select CONTROLLER in "user" "site" "database"
 do
 	break
 done
@@ -202,6 +204,50 @@ then
 		done
 	fi
 fi
-echo
 
-sleep 1
+if [[ "${CONTROLLER}" == "database" ]];
+then
+	if  [[ "${ACTION}" == "add" ]];
+	then
+	    echo
+		echo 'Select user'
+		PS3='Your choose: '
+		select USERNAME in `members --all webusers`
+		do
+            echo
+            echo -n "Enter database name "
+            read DATABASE
+
+            echo -n "Enter password "
+            read PASSWORD
+
+            if [[ -n "${DATABASE}" ]] && [[ -n "${PASSWORD}" ]];
+            then
+                mysql -u${DB_USER} -p${DB_PASS} -e "CREATE USER '${USERNAME}_${DATABASE}'@'localhost' IDENTIFIED BY '${PASSWORD}';"
+                mysql -u${DB_USER} -p${DB_PASS} -e "CREATE DATABASE IF NOT EXISTS ${USERNAME}_${DATABASE};"
+                mysql -u${DB_USER} -p${DB_PASS} -e "GRANT ALL PRIVILEGES ON ${USERNAME}_${DATABASE}.* TO '${USERNAME}_${DATABASE}'@'localhost';"
+                mysql -u${DB_USER} -p${DB_PASS} -e "FLUSH PRIVILEGES;"
+            fi
+
+            break
+		done
+	fi
+	if  [[ "${ACTION}" == "remove" ]];
+	then
+	    select USERNAME in `members --all webusers`
+		do
+            select DATABASE in `mysql -u${DB_USER} -p${DB_PASS} -e "show databases" | tr -d "| " | grep ${USERNAME}_`
+		    do
+                mysql -uroot -e "DROP DATABASE IF EXISTS ${DATABASE};"
+                mysql -uroot -e "DROP USER IF EXISTS '${DATABASE}'@'localhost';"
+                mysql -uroot -e "FLUSH PRIVILEGES;"
+
+		        break
+		    done
+
+            break
+		done
+	fi
+fi
+
+echo

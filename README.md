@@ -32,7 +32,7 @@ The script is tested on **Ubuntu 18.04**
     
 2. **Users** and **Sites**
 
-    For add or remove user or site launch script and follow instructions
+    For add or remove user, site or database launch script and follow instructions
 
     ```
     sudo ./menu.sh
