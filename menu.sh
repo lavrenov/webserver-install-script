@@ -234,8 +234,14 @@ then
 	fi
 	if  [[ "${ACTION}" == "remove" ]];
 	then
+	    echo
+		echo 'Select user'
+		PS3='Your choose: '
 	    select USERNAME in `members --all webusers`
 		do
+		    echo
+            echo 'Select database'
+            PS3='Your choose: '
             select DATABASE in `mysql -u${DB_USER} -p${DB_PASS} -e "show databases" | tr -d "| " | grep ${USERNAME}_`
 		    do
                 mysql -u${DB_USER} -p${DB_PASS} -e "DROP DATABASE IF EXISTS ${DATABASE};"
