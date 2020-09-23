@@ -30,7 +30,7 @@ then
     	read PASSWORD
 
         PHPFPMPOOL_CONF="/etc/php/7.4/fpm/pool.d/${USERNAME}.conf"
-        HOME_DIR="/var/www/${USERNAME}"
+        HOME_DIR="${WWW_DIR}/${USERNAME}"
 
 		useradd "${USERNAME}" -p "${PASSWORD}" -d "${HOME_DIR}" -m -s /bin/bash
         usermod -aG webusers "${USERNAME}"
@@ -66,7 +66,7 @@ then
             read CONFIRM
             if [[ "${CONFIRM}" == "Y" || "${CONFIRM}" == "y" ]];
             then
-                HOME_DIR="/var/www/${USERNAME}"
+                HOME_DIR="${WWW_DIR}/${USERNAME}"
                 PHPFPMPOOL_CONF="/etc/php/7.4/fpm/pool.d/${USERNAME}*"
 
 			    systemctl stop php7.4-fpm
@@ -112,7 +112,7 @@ then
             NGINX_SITE_DIR="/etc/nginx/sites-enabled/"
             APACHE_SITE_DIR="/etc/apache2/sites-enabled/"
             PHPFPMPOOL_CONF="/etc/php/7.4/fpm/pool.d/${USERNAME}_${DOMAIN}.conf"
-            HOME_DIR="/var/www/${USERNAME}"
+            HOME_DIR="${WWW_DIR}/${USERNAME}"
             SITE_DIR="${HOME_DIR}/sites/${DOMAIN}"
 
             cp -i ./config/template/nginx.http.conf "${NGINX_SITE_DIR}${DOMAIN}.conf"
@@ -163,7 +163,7 @@ then
 		PS3='Your choose: '
 		select USERNAME in `members --all webusers`
 		do
-		    HOME_DIR="/var/www/${USERNAME}"
+		    HOME_DIR="${WWW_DIR}/${USERNAME}"
 		    SITES_DIR="${HOME_DIR}/sites/"
 
 		    echo
@@ -227,6 +227,16 @@ then
                 mysql -u${DB_USER} -p${DB_PASS} -e "CREATE DATABASE IF NOT EXISTS ${USERNAME}_${DATABASE};"
                 mysql -u${DB_USER} -p${DB_PASS} -e "GRANT ALL PRIVILEGES ON ${USERNAME}_${DATABASE}.* TO '${USERNAME}_${DATABASE}'@'localhost';"
                 mysql -u${DB_USER} -p${DB_PASS} -e "FLUSH PRIVILEGES;"
+
+                DATABASE_EXISTS=`mysql -u${DB_USER} -p${DB_PASS} -e "show databases" | tr -d "| " | grep -c "${USERNAME}_${DATABASE}"`
+                if [[ "${DATABASE_EXISTS}" == "1" ]];
+                then
+                    echo "Database \"${USERNAME}_${DATABASE}\" was created."
+                    echo "Username: ${USERNAME}_${DATABASE}"
+                    echo "Password: ${PASSWORD}"
+                else
+                    echo "Database \"${USERNAME}_${DATABASE}\" was not created."
+                fi
             fi
 
             break
@@ -252,6 +262,14 @@ then
                     mysql -u${DB_USER} -p${DB_PASS} -e "DROP DATABASE IF EXISTS ${DATABASE};"
                     mysql -u${DB_USER} -p${DB_PASS} -e "DROP USER IF EXISTS '${DATABASE}'@'localhost';"
                     mysql -u${DB_USER} -p${DB_PASS} -e "FLUSH PRIVILEGES;"
+
+                    DATABASE_EXISTS=`mysql -u${DB_USER} -p${DB_PASS} -e "show databases" | tr -d "| " | grep -c "${DATABASE}"`
+                    if [[ "${DATABASE_EXISTS}" == "0" ]];
+                    then
+                        echo "Database \"${DATABASE}\" was removed."
+                    else
+                        echo "Database \"${DATABASE}\" was not removed."
+                    fi
                 fi
 
 		        break
