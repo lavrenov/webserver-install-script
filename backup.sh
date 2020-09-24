@@ -16,7 +16,7 @@ do
             IFS='=' read -ra site <<< "${backup}"
 
             mkdir -p ${BACKUP_DATE_DIR}/${site[0]}
-            cp -aRL ${WWW_DIR}/${USERNAME}/${site[0]} ${BACKUP_DATE_DIR} 2>/dev/null || :
+            cp -aRL ${WWW_DIR}/${USERNAME}/sites/${site[0]} ${BACKUP_DATE_DIR} 2>/dev/null || :
             rm -Rf ${BACKUP_DATE_DIR}/${site[0]}/log
             rm -Rf ${BACKUP_DATE_DIR}/${site[0]}/tmp
 
