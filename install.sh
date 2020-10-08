@@ -54,6 +54,7 @@ echo "Install NGINX" | tee -a "$log"
 apt-get install nginx -y 2>> "$log"
 cp ./config/etc/nginx/nginx.conf /etc/nginx/nginx.conf 2>> "$log"
 cp ./config/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default 2>> "$log"
+mkdir /etc/nginx/vhosts-includes 2>> "$log"
 cp ./config/etc/nginx/vhosts-includes/badbot.conf /etc/nginx/vhosts-includes/badbot.conf 2>> "$log"
 rm -f /var/www/html/index.nginx-debian.html
 systemctl restart nginx 2>> "$log"
