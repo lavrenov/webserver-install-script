@@ -29,6 +29,7 @@ date +"Start install - %F %T" >> "$log"
 echo "===========================================" >> "$log"
 
 echo "Update system" | tee -a "$log"
+ACCEPT_EULA=Y
 apt-get update -y && apt-get upgrade -y 2>> "$log"
 apt-get install curl unzip software-properties-common apt-transport-https members -y 2>> "$log"
 add-apt-repository ppa:ondrej/php -y
