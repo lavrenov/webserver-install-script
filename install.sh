@@ -1,9 +1,9 @@
 #!/bin/bash
 
 . /etc/lsb-release
-if [[ "${DISTRIB_CODENAME}" != "bionic" ]];
+if [[ "${DISTRIB_CODENAME}" != "bionic" || "${DISTRIB_CODENAME}" != "focal" ]];
 then
-    echo "Your OS is not Ubuntu 18"
+    echo "Your OS is not Ubuntu 18 or Ubuntu 20"
     sleep 1
     exit 1
 fi
@@ -71,13 +71,23 @@ echo "Install PHP" | tee -a "$log"
 apt-get install php7.4 php7.4-fpm php7.4-mysql php7.4-mysqli php7.4-curl php7.4-json php7.4-cgi php7.4-gd php7.4-zip php7.4-mbstring php7.4-xml php7.4-xmlrpc php7.4-gmp php7.4-intl -y 2>> "$log"
 systemctl restart php7.4-fpm 2>> "$log"
 
-echo "Install FTP" | tee -a "$log"
-apt-get install proftpd -y 2>> "$log"
-cp ./config/etc/proftpd/proftpd.conf /etc/proftpd/proftpd.conf 2>> "$log"
-cp ./config/etc/proftpd/conf.d/custom.conf /etc/proftpd/conf.d/custom.conf 2>> "$log"
-touch /etc/proftpd/ftpd.passwd
-chmod o-rwx /etc/proftpd/ftpd.passwd
-systemctl restart proftpd 2>> "$log"
+if [[ "${FORCE_INSTALL}" != "-f" ]];
+then
+    echo -n "Do you want to install ProFTP? [Y/n] "
+    read USER_ANSWER
+else
+    USER_ANSWER="Y"
+fi
+if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
+then
+    echo "Install FTP" | tee -a "$log"
+    apt-get install proftpd -y 2>> "$log"
+    cp ./config/etc/proftpd/proftpd.conf /etc/proftpd/proftpd.conf 2>> "$log"
+    cp ./config/etc/proftpd/conf.d/custom.conf /etc/proftpd/conf.d/custom.conf 2>> "$log"
+    touch /etc/proftpd/ftpd.passwd
+    chmod o-rwx /etc/proftpd/ftpd.passwd
+    systemctl restart proftpd 2>> "$log"
+fi
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
 then

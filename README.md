@@ -7,14 +7,14 @@
 
 ## System requirements
 
-The script is tested on **Ubuntu 18.04**
+The script is tested on **Ubuntu 18.04, 20.04**
 
 ## What does this script install?
 
 - **Nginx** + **Apache** *(Nginx for static files, Apache for dynamic files)*
 - **MariaDB 10.3**
 - **PHP 7.4**
-- **ProFTP**
+- **ProFTP** *(optional)*
 - **phpMyAdmin 5.0.1** *(optional)*
 - **Certbot** *(optional)*
 - **Fail2Ban** *(optional)*
