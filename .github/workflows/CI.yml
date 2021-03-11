@@ -7,8 +7,16 @@ on:
     branches: [ master ]
 
 jobs:
-  install:
-    runs-on: [ubuntu-18.04,ubuntu-20.04]
+  install on ubuntu 18:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install
+        run: sudo apt-get remove msodbcsql17 -y && sudo ./install.sh -f
+        
+  install on ubuntu 20:
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
 
