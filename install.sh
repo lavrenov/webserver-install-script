@@ -29,10 +29,7 @@ date +"Start install - %F %T" >> "$log"
 echo "===========================================" >> "$log"
 
 echo "Update system" | tee -a "$log"
-exec { "/usr/bin/apt-get -yq install msodbcsql":
-  environment => "ACCEPT_EULA=Y",
-  unless => "/usr/bin/dpkg -l msodbcsql | tail -1 | grep ^ii",
-}
+apt-get remove msodbcsql17 -y
 apt-get update -y && apt-get upgrade -y 2>> "$log"
 apt-get install curl unzip software-properties-common apt-transport-https members -y 2>> "$log"
 add-apt-repository ppa:ondrej/php -y
