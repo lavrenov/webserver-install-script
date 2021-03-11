@@ -61,7 +61,7 @@ systemctl restart nginx 2>> "$log"
 
 echo "Install MariaDB" | tee -a "$log"
 apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc' -y
-add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.ufscar.br/mariadb/repo/10.3/ubuntu bionic main' -y
+add-apt-repository "deb [arch=amd64,arm64,ppc64el] http://mirror.ufscar.br/mariadb/repo/10.3/ubuntu ${DISTRIB_CODENAME} main" -y
 apt-get update -y 2>> "$log"
 apt-get install mariadb-server -y 2>> "$log"
 cp ./config/etc/mysql/conf.d/my.cnf /etc/mysql/conf.d/my.cnf 2>> "$log"
@@ -114,20 +114,23 @@ then
     systemctl restart mariadb
 fi
 
-if [[ "${FORCE_INSTALL}" != "-f" ]];
+if [[ "${DISTRIB_CODENAME}" != "focal" ]];
 then
-    echo -n "Do you want to install Certbot? [Y/n] "
-    read USER_ANSWER
-else
-    USER_ANSWER="Y"
-fi
-if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
-then
-    echo "Install Certbot" | tee -a "$log"
-    add-apt-repository ppa:certbot/certbot -y
-    apt-get update -y 2>> "$log"
-    apt-get install certbot -y 2>> "$log"
-    apt-get install python-certbot-nginx -y 2>> "$log"
+    if [[ "${FORCE_INSTALL}" != "-f" ]];
+    then
+        echo -n "Do you want to install Certbot? [Y/n] "
+        read USER_ANSWER
+    else
+        USER_ANSWER="Y"
+    fi
+    if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
+    then
+        echo "Install Certbot" | tee -a "$log"
+        add-apt-repository ppa:certbot/certbot -y
+        apt-get update -y 2>> "$log"
+        apt-get install certbot -y 2>> "$log"
+        apt-get install python-certbot-nginx -y 2>> "$log"
+    fi
 fi
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
