@@ -71,7 +71,7 @@ cp ./config/etc/mysql/conf.d/my.cnf /etc/mysql/conf.d/my.cnf 2>> "$log"
 systemctl restart mariadb
 
 echo "Install PHP" | tee -a "$log"
-apt-get install php7.4 php7.4-fpm php7.4-mysql php7.4-mysqli php7.4-curl php7.4-json php7.4-cgi php7.4-gd php7.4-zip php7.4-mbstring php7.4-xml php7.4-xmlrpc php7.4-gmp php7.4-intl -y 2>> "$log"
+apt-get install php7.4 php7.4-fpm php7.4-mysql php7.4-mysqli php7.4-curl php7.4-json php7.4-cgi php7.4-gd php7.4-zip php7.4-mbstring php7.4-xml php7.4-xmlrpc php7.4-gmp php7.4-intl php7.4-bcmath -y 2>> "$log"
 systemctl restart php7.4-fpm 2>> "$log"
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
