@@ -33,7 +33,7 @@ apt-get update -y && apt-get upgrade -y 2>> "$log"
 apt-get install curl unzip software-properties-common apt-transport-https members -y 2>> "$log"
 add-apt-repository ppa:ondrej/php -y
 apt-get update -y 2>> "$log"
-apt-get dist-upgrade
+apt-get dist-upgrade -y 2>> "$log"
 groupadd webusers 2>> "$log"
 
 echo "Install Apache" | tee -a "$log"
@@ -61,6 +61,13 @@ rm -f /var/www/html/index.nginx-debian.html
 systemctl restart nginx 2>> "$log"
 
 echo "Install MariaDB" | tee -a "$log"
+systemctl stop mysqld
+apt purge mysql-server mysql-common mysql-server-core-* mysql-client-core-* 2>> "$log"
+rm -Rf /var/lib/mysql/
+rm -Rf /etc/mysql/
+rm -Rf /var/log/mysql
+deluser --remove-home mysql
+delgroup mysql
 if [[ "${DISTRIB_CODENAME}" != "focal" ]];
 then
     apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc' -y
