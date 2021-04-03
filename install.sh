@@ -62,7 +62,7 @@ systemctl restart nginx 2>> "$log"
 
 echo "Install MariaDB" | tee -a "$log"
 systemctl stop mysqld
-apt purge mysql-server mysql-common mysql-server-core-* mysql-client-core-* 2>> "$log"
+apt-get purge mysql-server mysql-common mysql-server-core-* mysql-client-core-* 2>> "$log"
 rm -Rf /var/lib/mysql/
 rm -Rf /etc/mysql/
 rm -Rf /var/log/mysql
