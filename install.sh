@@ -219,6 +219,7 @@ rm -rf ${SETTINGS_FILE}
 echo "WWW_DIR=/var/www" >> ${SETTINGS_FILE}
 echo "DB_USER=root" >> ${SETTINGS_FILE}
 echo "DB_PASS=" >> ${SETTINGS_FILE}
+echo "DAILY_INCREMENTAL=1" >> ${SETTINGS_FILE}
 
 echo "===========================================" >> "$log"
 date +"Finished - %F %T" >> "$log"
