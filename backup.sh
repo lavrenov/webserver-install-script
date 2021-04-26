@@ -34,6 +34,16 @@ then
             do
                 IFS='=' read -ra site <<< "${backup}"
 
+                if [[ "${TASK}" == "monthly" || "${TASK}" == "weekly" ]];
+                then
+                    rm -Rf ${BACKUP_USER_DIR}/${site[0]}.snar
+                fi
+
+                if [[ "${DAILY_INCREMENTAL}" != "1" && "${TASK}" == "daily" ]];
+                then
+                    rm -Rf ${BACKUP_USER_DIR}/${site[0]}.snar
+                fi
+
                 mkdir -p ${BACKUP_DATE_DIR}/${site[0]}
                 cp -aRL ${WWW_DIR}/${USERNAME}/sites/${site[0]} ${BACKUP_DATE_DIR} 2>/dev/null || :
                 rm -Rf ${BACKUP_DATE_DIR}/${site[0]}/log
@@ -55,7 +65,7 @@ then
                 fi
 
                 cd ${BACKUP_DATE_DIR}
-                tar -zcf ${site[0]}.tar.gz ${site[0]}
+                tar --create --gzip --file=${site[0]}.tgz --listed-incremental=${BACKUP_USER_DIR}/${site[0]}.snar ${site[0]}
                 rm -Rf ${site[0]}
 
                 find "${BACKUP_USER_DIR}/${TASK}" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rnk1 | awk 'NR>'"${BACKUP_COUNT}"' { sub(/^\S+ /, "", $0); system("rm -r -f \"" $0 "\"")}'
