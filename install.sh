@@ -214,31 +214,11 @@ then
     rm -f composer-setup.php
 fi
 
-if [[ "${FORCE_INSTALL}" != "-f" ]];
-then
-    echo -n "Do you want to install AWS CLI? [Y/n] "
-    read USER_ANSWER
-else
-    USER_ANSWER="Y"
-fi
-if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
-then
-    echo "Install AWS CLI" | tee -a "$log"
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-    unzip awscliv2.zip
-    ./aws/install
-    rm -Rf aws
-    rm -f awscliv2.zip
-fi
-
 SETTINGS_FILE="./settings"
 rm -rf ${SETTINGS_FILE}
 echo "WWW_DIR=/var/www" >> ${SETTINGS_FILE}
 echo "DB_USER=root" >> ${SETTINGS_FILE}
 echo "DB_PASS=" >> ${SETTINGS_FILE}
-echo "BACKUP_COUNT=7" >> ${SETTINGS_FILE}
-echo "BUCKET=" >> ${SETTINGS_FILE}
-echo "ENDPOINT_URL=" >> ${SETTINGS_FILE}
 
 echo "===========================================" >> "$log"
 date +"Finished - %F %T" >> "$log"
