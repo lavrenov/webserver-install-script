@@ -148,8 +148,6 @@ then
                 sed -i "s/%SITENAME%//g" "${APACHE_SITE_DIR}${DOMAIN}.conf"
             fi
 
-            a2dissite 000-default
-
             systemctl reload nginx
             systemctl reload apache2
 

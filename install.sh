@@ -196,7 +196,7 @@ fi
 if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]];
 then
     echo "Install Memcached" | tee -a "$log"
-    apt-get install memcached php-memcached -y 2>> "$log"
+    apt-get install memcached php7.4-memcached -y 2>> "$log"
 fi
 
 if [[ "${FORCE_INSTALL}" != "-f" ]];
