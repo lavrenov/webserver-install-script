@@ -109,8 +109,8 @@ then
 		    echo -n "Enter site domain name "
             read DOMAIN
 
-            NGINX_SITE_DIR="/etc/nginx/sites-enabled/"
-            APACHE_SITE_DIR="/etc/apache2/sites-enabled/"
+            NGINX_SITE_DIR="/etc/nginx/sites-available/"
+            APACHE_SITE_DIR="/etc/apache2/sites-available/"
             PHPFPMPOOL_CONF="/etc/php/7.4/fpm/pool.d/${USERNAME}_${DOMAIN}.conf"
             HOME_DIR="${WWW_DIR}/${USERNAME}"
             SITE_DIR="${HOME_DIR}/sites/${DOMAIN}"
@@ -148,6 +148,9 @@ then
                 sed -i "s/%SITENAME%//g" "${APACHE_SITE_DIR}${DOMAIN}.conf"
             fi
 
+            ln -s "${NGINX_SITE_DIR}${DOMAIN}.conf" /etc/nginx/sites-enabled/${DOMAIN}.conf
+            a2ensite ${DOMAIN}.conf
+
             systemctl reload nginx
             systemctl reload apache2
 
@@ -174,8 +177,11 @@ then
                 read CONFIRM
                 if [[ "${CONFIRM}" == "Y" || "${CONFIRM}" == "y" ]];
                 then
-                    NGINX_SITE_DIR="/etc/nginx/sites-enabled/"
-                    APACHE_SITE_DIR="/etc/apache2/sites-enabled/"
+                    sudo rm "/etc/nginx/sites-enabled/${DOMAIN}.conf"
+                    a2dissite ${DOMAIN}.conf
+
+                    NGINX_SITE_DIR="/etc/nginx/sites-available/"
+                    APACHE_SITE_DIR="/etc/apache2/sites-available/"
                     PHPFPMPOOL_CONF="/etc/php/7.4/fpm/pool.d/${USERNAME}_${DOMAIN}.conf"
                     SITE_DIR="${SITES_DIR}${DOMAIN}"
 
