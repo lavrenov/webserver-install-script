@@ -68,12 +68,11 @@ rm -Rf /etc/mysql/
 rm -Rf /var/log/mysql
 deluser --remove-home mysql
 delgroup mysql
-if [[ "${DISTRIB_CODENAME}" != "focal" ]];
-then
-    apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc' -y
-    add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.ufscar.br/mariadb/repo/10.3/ubuntu bionic main' -y
-    apt-get update -y 2>> "$log"
-fi
+
+apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc' -y
+add-apt-repository "deb [arch=amd64,arm64,ppc64el] http://mirror.mephi.ru/mariadb/repo/10.3/ubuntu ${DISTRIB_CODENAME} main" -y
+apt-get update -y 2>> "$log"
+
 apt-get install mariadb-server -y 2>> "$log"
 cp ./config/etc/mysql/conf.d/my.cnf /etc/mysql/conf.d/my.cnf 2>> "$log"
 systemctl restart mariadb
