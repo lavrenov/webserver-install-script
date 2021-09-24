@@ -4,7 +4,7 @@
 
 TASK=$1
 
-if [[ "${TASK}" == "daily" || "${TASK}" == "weekly" || "${TASK}" == "monthly" ]];
+if [[ "${TASK}" == "daily" || "${TASK}" == "weekly" || "${TASK}" == "monthly" || "${TASK}" == "yearly" ]];
 then
     if [[ "${TASK}" == "daily" ]];
     then
@@ -21,6 +21,11 @@ then
         BACKUP_COUNT=12
     fi
 
+    if [[ "${TASK}" == "yearly" ]];
+    then
+        BACKUP_COUNT=3
+    fi
+
     for USERNAME in `members --all webusers`
     do
         if [[ -n "${USERNAME}" ]];
@@ -33,16 +38,6 @@ then
             for backup in `cat ${BACKUP_LIST}`
             do
                 IFS='=' read -ra site <<< "${backup}"
-
-                if [[ "${TASK}" == "monthly" || "${TASK}" == "weekly" ]];
-                then
-                    rm -Rf ${BACKUP_USER_DIR}/${site[0]}.snar
-                fi
-
-                if [[ "${DAILY_INCREMENTAL}" != "1" && "${TASK}" == "daily" ]];
-                then
-                    rm -Rf ${BACKUP_USER_DIR}/${site[0]}.snar
-                fi
 
                 mkdir -p ${BACKUP_DATE_DIR}/${site[0]}
                 cp -aRL ${WWW_DIR}/${USERNAME}/sites/${site[0]} ${BACKUP_DATE_DIR} 2>/dev/null || :
@@ -65,15 +60,20 @@ then
                 fi
 
                 cd ${BACKUP_DATE_DIR}
-                tar --create --gzip --file=${site[0]}.tgz --listed-incremental=${BACKUP_USER_DIR}/${site[0]}.snar ${site[0]}
+                tar --create --gzip --file=${site[0]}.tgz ${site[0]}
                 rm -Rf ${site[0]}
 
                 find "${BACKUP_USER_DIR}/${TASK}" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rnk1 | awk 'NR>'"${BACKUP_COUNT}"' { sub(/^\S+ /, "", $0); system("rm -r -f \"" $0 "\"")}'
+
+                if [[ -n "${BUCKET}" ]] && [[ -n "${ENDPOINT_URL}" ]];
+                then
+                    /usr/local/bin/aws s3 cp ${BACKUP_DATE_DIR} "s3://${BUCKET}/backup/${USERNAME}/${TASK}/${DATE}" --recursive --quiet --endpoint-url ${ENDPOINT_URL}
+                fi
             done
 
             chown -R ${USERNAME}:${USERNAME} ${BACKUP_USER_DIR}
         fi
     done
 else
-    echo "Required parameters not entered (backup.sh [daily|weekly|monthly])"
+    echo "Required parameters not entered (backup.sh [daily|weekly|monthly|yearly])"
 fi

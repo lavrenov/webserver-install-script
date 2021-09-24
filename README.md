@@ -21,6 +21,7 @@ The script is tested on **Ubuntu 18.04, 20.04**
 - **IP Tables** *(optional)*
 - **Memcached** *(optional)*
 - **Composer** *(optional)*
+- **AWS CLI** *(optional)*
 
 ## How this is work
 
