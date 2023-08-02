@@ -13,13 +13,12 @@ The script is tested on **Ubuntu 18.04, 20.04**
 
 - **Nginx** + **Apache** *(Nginx for static files, Apache for dynamic files)*
 - **MariaDB 10.3**
-- **PHP 7.4**
+- **PHP 7.4, 8.0**
 - **ProFTP** *(optional)*
 - **phpMyAdmin 5.0.1** *(optional)*
 - **Certbot** *(optional)*
 - **Fail2Ban** *(optional)*
 - **IP Tables** *(optional)*
-- **Memcached** *(optional)*
 - **Composer** *(optional)*
 - **AWS CLI** *(optional)*
 
