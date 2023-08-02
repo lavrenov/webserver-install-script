@@ -34,7 +34,7 @@ apt-get dist-upgrade -y 2>>"$log"
 groupadd webusers 2>>"$log"
 
 echo "Install Apache" | tee -a "$log"
-apt-get install apache2 libapache2-mod-php7.4 libapache2-mod-php8.0 libapache2-mod-fcgid -y 2>>"$log"
+apt-get install apache2 libapache2-mod-php7.4 libapache2-mod-fcgid -y 2>>"$log"
 cp ./config/etc/apache2/ports.conf /etc/apache2/ports.conf 2>>"$log"
 cp ./config/etc/apache2/mods-available/dir.conf /etc/apache2/mods-available/dir.conf 2>>"$log"
 cp ./config/etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf 2>>"$log"
@@ -42,7 +42,7 @@ cp ./config/etc/apache2/apache2.conf /etc/apache2/apache2.conf 2>>"$log"
 cp ./config/etc/apache2/mods-available/remoteip.conf /etc/apache2/mods-available/remoteip.conf 2>>"$log"
 a2dismod mpm_event 2>>"$log"
 a2enmod mpm_prefork 2>>"$log"
-a2enmod php8.0 setenvif actions fcgid alias proxy_fcgi remoteip rewrite headers 2>>"$log"
+a2enmod php7.4 setenvif actions fcgid alias proxy_fcgi remoteip rewrite headers 2>>"$log"
 chown -R www-data:www-data /var/www 2>>"$log"
 rm -f /var/www/html/index.html
 echo "<?php phpinfo(); ?>" >"/var/www/html/index.php"
@@ -79,7 +79,7 @@ apt-get install php7.4 php7.4-mysql php7.4-curl php7.4-json php7.4-gd php7.4-zip
 systemctl restart php7.4-fpm 2>>"$log"
 
 echo "Install PHP 8.0" | tee -a "$log"
-apt-get install php8.0 php8.0-mysql php8.0-curl php8.0-json php8.0-gd php8.0-zip php8.0-mbstring php8.0-xml php8.0-xmlrpc php8.0-gmp php8.0-memcached php8.0-intl php8.0-bcmath -y 2>>"$log"
+apt-get install php8.0 php8.0-mysql php8.0-curl php8.0-gd php8.0-zip php8.0-mbstring php8.0-xml php8.0-xmlrpc php8.0-gmp php8.0-memcached php8.0-intl php8.0-bcmath -y 2>>"$log"
 systemctl restart php8.0-fpm 2>>"$log"
 
 if [[ "${FORCE_INSTALL}" != "-f" ]]; then
