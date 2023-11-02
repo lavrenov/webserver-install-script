@@ -3,9 +3,6 @@
 . $(dirname "$0")/settings
 
 PHPVERSIONS=("7.4" "8.0" "8.2")
-for PHPVERSION in ${PHPVERSIONS[@]}; do
-	echo ${PHPVERSION}
-done
 
 echo
 echo 'Select controller'
