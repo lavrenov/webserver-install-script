@@ -40,7 +40,7 @@ The script is tested on **Ubuntu 18.04, 20.04**
 3. **Firewall usage**   
 
     ```
-    /etc/init.d/firewall.sh {start|stop|restart}
+    sudo /etc/init.d/firewall.sh {start|stop|restart}
     ```
     
     Config file path /etc/iptables.start
@@ -53,7 +53,7 @@ The script is tested on **Ubuntu 18.04, 20.04**
     Cerbot
     ```
     
-3. **Uninstall:**
+5. **Uninstall:**
     ```
     sudo ./uninstall.sh
     ``` 

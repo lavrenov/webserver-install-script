@@ -26,9 +26,10 @@ if [[ "${CONTROLLER}" == "user" ]]; then
 
 		echo -n "Enter password "
 		read PASSWORD
+		PASS=$(mkpasswd -m sha512crypt -s ${PASSWORD})
 
 		HOME_DIR="${WWW_DIR}/${USERNAME}"
-		useradd "${USERNAME}" -p "${PASSWORD}" -d "${HOME_DIR}" -m -s /bin/bash
+		useradd "${USERNAME}" -p "${PASS}" -d "${HOME_DIR}" -m -s /bin/bash
 		usermod -aG webusers "${USERNAME}"
 
 		USER_ID=$(id -u "${USERNAME}")
