@@ -47,6 +47,8 @@ if [[ "${CONTROLLER}" == "user" ]]; then
 			systemctl restart php${PHPVERSION}-fpm
 		done
 
+		chown -R "${USERNAME}":"${USERNAME}" "${HOME_DIR}"
+
 		USER_EXISTS=$(members --all webusers | grep -c "${USERNAME}")
 		if [[ "${USER_EXISTS}" == "1" ]]; then
 			echo "User \"${USERNAME}\" was created."

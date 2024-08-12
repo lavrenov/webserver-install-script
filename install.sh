@@ -67,7 +67,7 @@ deluser --remove-home mysql
 delgroup mysql
 
 apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc' -y
-add-apt-repository "deb [arch=amd64,arm64,ppc64el] http://mirror.mephi.ru/mariadb/repo/10.3/ubuntu ${DISTRIB_CODENAME} main" -y
+add-apt-repository "deb [arch=amd64,arm64,ppc64el] http://mirror.mephi.ru/mariadb/repo/10.6/ubuntu ${DISTRIB_CODENAME} main" -y
 apt-get update -y 2>>"$log"
 
 apt-get install mariadb-server -y 2>>"$log"
@@ -110,12 +110,12 @@ else
 fi
 if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]]; then
 	echo "Install phpMyAdmin" | tee -a "$log"
-	wget https://files.phpmyadmin.net/phpMyAdmin/5.0.1/phpMyAdmin-5.0.1-all-languages.tar.gz
-	tar xzf phpMyAdmin-5.0.1-all-languages.tar.gz 2>>"$log"
+	wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.tar.gz
+	tar xzf phpMyAdmin-5.2.1-all-languages.tar.gz 2>>"$log"
 	mkdir /usr/share/phpmyadmin 2>>"$log"
-	mv phpMyAdmin-5.0.1-all-languages/* /usr/share/phpmyadmin 2>>"$log"
-	rm phpMyAdmin-5.0.1-all-languages.tar.gz 2>>"$log"
-	rm -rf phpMyAdmin-5.0.1-all-languages 2>>"$log"
+	mv phpMyAdmin-5.2.1-all-languages/* /usr/share/phpmyadmin 2>>"$log"
+	rm phpMyAdmin-5.2.1-all-languages.tar.gz 2>>"$log"
+	rm -rf phpMyAdmin-5.2.1-all-languages 2>>"$log"
 	mkdir /usr/share/phpmyadmin/tmp 2>>"$log"
 	chmod 777 /usr/share/phpmyadmin/tmp 2>>"$log"
 	cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php 2>>"$log"

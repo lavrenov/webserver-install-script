@@ -12,10 +12,10 @@ The script is tested on **Ubuntu 18.04, 20.04**
 ## What does this script install?
 
 - **Nginx** + **Apache**
-- **MariaDB 10.3**
+- **MariaDB 10.6**
 - **PHP 7.4, 8.0, 8.2**
 - **ProFTP** *(optional)*
-- **phpMyAdmin 5.0.1** *(optional)*
+- **phpMyAdmin 5.2.1** *(optional)*
 - **Certbot** *(optional)*
 - **Fail2Ban** *(optional)*
 - **IP Tables** *(optional)*
