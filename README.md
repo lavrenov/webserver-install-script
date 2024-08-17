@@ -13,7 +13,7 @@ The script is tested on **Ubuntu 18.04, 20.04**
 
 - **Nginx** + **Apache**
 - **MariaDB 10.6**
-- **PHP 7.4, 8.0, 8.2**
+- **PHP 7.4, 8.0, 8.1, 8.2, 8.3**
 - **ProFTP** *(optional)*
 - **phpMyAdmin 5.2.1** *(optional)*
 - **Certbot** *(optional)*
