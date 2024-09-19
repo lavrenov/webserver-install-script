@@ -16,7 +16,6 @@ The script is tested on **Ubuntu 18.04, 20.04**
 - **PHP 7.4, 8.0, 8.1, 8.2, 8.3**
 - **ProFTP** *(optional)*
 - **phpMyAdmin 5.2.1** *(optional)*
-- **Certbot** *(optional)*
 - **Fail2Ban** *(optional)*
 - **IP Tables** *(optional)*
 - **Composer** *(optional)*
@@ -39,21 +38,13 @@ The script is tested on **Ubuntu 18.04, 20.04**
 
 3. **Firewall usage**   
 
-    ```
-    sudo /etc/init.d/firewall.sh {start|stop|restart}
-    ```
+   Config file path /etc/iptables.start
+   
+   ```
+   sudo /etc/init.d/firewall.sh {start|stop|restart}
+   ```
     
-    Config file path /etc/iptables.start
-    
-4. **Certbot**
-
-    launch script and follow instructions
-
-    ```
-    Cerbot
-    ```
-    
-5. **Uninstall:**
+4. **Uninstall:**
     ```
     sudo ./uninstall.sh
     ``` 

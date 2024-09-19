@@ -134,29 +134,6 @@ if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]]; then
 fi
 
 if [[ "${FORCE_INSTALL}" != "-f" ]]; then
-	echo -n "Do you want to install Certbot? [Y/n] "
-	read USER_ANSWER
-else
-	USER_ANSWER="Y"
-fi
-if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]]; then
-	echo "Install Certbot" | tee -a "$log"
-
-	if [[ "${DISTRIB_CODENAME}" != "focal" ]]; then
-		add-apt-repository ppa:certbot/certbot -y
-	fi
-
-	apt-get update -y 2>>"$log"
-	apt-get install certbot -y 2>>"$log"
-
-	if [[ "${DISTRIB_CODENAME}" != "focal" ]]; then
-		apt-get install python-certbot-nginx -y 2>>"$log"
-	else
-		apt-get install python3-certbot-nginx -y 2>>"$log"
-	fi
-fi
-
-if [[ "${FORCE_INSTALL}" != "-f" ]]; then
 	echo -n "Do you want to install Fail2Ban? [Y/n] "
 	read USER_ANSWER
 else
