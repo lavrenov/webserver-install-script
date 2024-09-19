@@ -77,7 +77,11 @@ systemctl restart mariadb
 
 for PHPVERSION in ${PHPVERSIONS[@]}; do
   echo "Install PHP ${PHPVERSION}" | tee -a "$log"
-  apt-get install php${PHPVERSION} php${PHPVERSION}-fpm php${PHPVERSION}-mysql php${PHPVERSION}-curl php${PHPVERSION}-json php${PHPVERSION}-gd php${PHPVERSION}-zip php${PHPVERSION}-mbstring php${PHPVERSION}-xml php${PHPVERSION}-xmlrpc php${PHPVERSION}-gmp php${PHPVERSION}-memcached php${PHPVERSION}-intl php${PHPVERSION}-bcmath -y 2>>"$log"
+  apt-get install php${PHPVERSION} php${PHPVERSION}-fpm php${PHPVERSION}-mysql php${PHPVERSION}-curl php${PHPVERSION}-gd php${PHPVERSION}-zip php${PHPVERSION}-mbstring php${PHPVERSION}-xml php${PHPVERSION}-xmlrpc php${PHPVERSION}-gmp php${PHPVERSION}-memcached php${PHPVERSION}-intl php${PHPVERSION}-bcmath -y 2>>"$log"
+  if [[ "${PHPVERSION}" == "7.4" ]]; then
+    apt-get install php${PHPVERSION}-json
+  fi
+  
   systemctl restart php${PHPVERSION}-fpm 2>>"$log"
 done
 
