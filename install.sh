@@ -8,6 +8,7 @@ if [[ "${DISTRIB_CODENAME}" != "bionic" && "${DISTRIB_CODENAME}" != "focal" && "
 fi
 
 FORCE_INSTALL=$1
+PHPVERSIONS=("7.4" "8.0" "8.1" "8.2" "8.3")
 
 if [[ "${FORCE_INSTALL}" != "-f" ]]; then
 	echo -n "Do you want to install WebServer? [Y/n] "
@@ -74,25 +75,11 @@ apt-get install mariadb-server -y 2>>"$log"
 cp ./config/etc/mysql/conf.d/my.cnf /etc/mysql/conf.d/my.cnf 2>>"$log"
 systemctl restart mariadb
 
-echo "Install PHP 7.4" | tee -a "$log"
-apt-get install php7.4 php7.4-fpm php7.4-mysql php7.4-curl php7.4-json php7.4-gd php7.4-zip php7.4-mbstring php7.4-xml php7.4-xmlrpc php7.4-gmp php7.4-memcached php7.4-intl php7.4-bcmath -y 2>>"$log"
-systemctl restart php7.4-fpm 2>>"$log"
-
-echo "Install PHP 8.0" | tee -a "$log"
-apt-get install php8.0 php8.0-fpm php8.0-mysql php8.0-curl php8.0-gd php8.0-zip php8.0-mbstring php8.0-xml php8.0-xmlrpc php8.0-gmp php8.0-memcached php8.0-intl php8.0-bcmath -y 2>>"$log"
-systemctl restart php8.0-fpm 2>>"$log"
-
-echo "Install PHP 8.1" | tee -a "$log"
-apt-get install php8.1 php8.1-fpm php8.1-mysql php8.1-curl php8.1-gd php8.1-zip php8.1-mbstring php8.1-xml php8.1-xmlrpc php8.1-gmp php8.1-memcached php8.1-intl php8.1-bcmath -y 2>>"$log"
-systemctl restart php8.1-fpm 2>>"$log"
-
-echo "Install PHP 8.2" | tee -a "$log"
-apt-get install php8.2 php8.2-fpm php8.2-mysql php8.2-curl php8.2-gd php8.2-zip php8.2-mbstring php8.2-xml php8.2-xmlrpc php8.2-gmp php8.2-memcached php8.2-intl php8.2-bcmath -y 2>>"$log"
-systemctl restart php8.2-fpm 2>>"$log"
-
-echo "Install PHP 8.3" | tee -a "$log"
-apt-get install php8.3 php8.3-fpm php8.3-mysql php8.3-curl php8.3-gd php8.3-zip php8.3-mbstring php8.3-xml php8.3-xmlrpc php8.3-gmp php8.3-memcached php8.3-intl php8.3-bcmath -y 2>>"$log"
-systemctl restart php8.3-fpm 2>>"$log"
+for PHPVERSION in ${PHPVERSIONS[@]}; do
+  echo "Install PHP ${PHPVERSION}" | tee -a "$log"
+  apt-get install php${PHPVERSION} php${PHPVERSION}-fpm php${PHPVERSION}-mysql php${PHPVERSION}-curl php${PHPVERSION}-json php${PHPVERSION}-gd php${PHPVERSION}-zip php${PHPVERSION}-mbstring php${PHPVERSION}-xml php${PHPVERSION}-xmlrpc php${PHPVERSION}-gmp php${PHPVERSION}-memcached php${PHPVERSION}-intl php${PHPVERSION}-bcmath -y 2>>"$log"
+  systemctl restart php${PHPVERSION}-fpm 2>>"$log"
+done
 
 if [[ "${FORCE_INSTALL}" != "-f" ]]; then
 	echo -n "Do you want to install ProFTP? [Y/n] "

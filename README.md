@@ -7,7 +7,7 @@
 
 ## System requirements
 
-The script is tested on **Ubuntu 18.04, 20.04**
+The script is tested on **Ubuntu 18.04, 20.04, 22.04**
 
 ## What does this script install?
 
