@@ -1,8 +1,8 @@
 #!/bin/bash
 
 . /etc/lsb-release
-if [[ "${DISTRIB_CODENAME}" != "bionic" && "${DISTRIB_CODENAME}" != "focal" ]]; then
-	echo "Your OS is not Ubuntu 18 or Ubuntu 20"
+if [[ "${DISTRIB_CODENAME}" != "bionic" && "${DISTRIB_CODENAME}" != "focal" && "${DISTRIB_CODENAME}" != "jammy" ]]; then
+	echo "Your OS is not Ubuntu 18, Ubuntu 20 or Ubuntu 22"
 	sleep 1
 	exit 1
 fi
