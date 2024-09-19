@@ -3,6 +3,7 @@
 . $(dirname "$0")/settings
 
 TASK=$1
+PHPVERSIONS=("7.4" "8.0" "8.1" "8.2" "8.3")
 
 if [[ "${TASK}" == "daily" || "${TASK}" == "weekly" || "${TASK}" == "monthly" || "${TASK}" == "yearly" ]]; then
 	if [[ "${TASK}" == "daily" ]]; then
@@ -42,11 +43,10 @@ if [[ "${TASK}" == "daily" || "${TASK}" == "weekly" || "${TASK}" == "monthly" ||
 				mkdir -p ${BACKUP_DATE_DIR}/${site[0]}/configs/nginx
 				cp -aRL /etc/nginx/sites-enabled/${site[0]}.conf ${BACKUP_DATE_DIR}/${site[0]}/configs/nginx/${site[0]}.conf 2>/dev/null || :
 
-				mkdir -p ${BACKUP_DATE_DIR}/${site[0]}/configs/php7.4-fpm
-				cp -aRL /etc/php/7.4/fpm/pool.d/${USERNAME}_${site[0]}.conf ${BACKUP_DATE_DIR}/${site[0]}/configs/php7.4-fpm/${USERNAME}_${site[0]}.conf 2>/dev/null || :
-
-				mkdir -p ${BACKUP_DATE_DIR}/${site[0]}/configs/php8.0-fpm
-            	cp -aRL /etc/php/8.0/fpm/pool.d/${USERNAME}_${site[0]}.conf ${BACKUP_DATE_DIR}/${site[0]}/configs/php8.0-fpm/${USERNAME}_${site[0]}.conf 2>/dev/null || :
+        for PHPVERSION in ${PHPVERSIONS[@]}; do
+				  mkdir -p ${BACKUP_DATE_DIR}/${site[0]}/configs/php${PHPVERSION}-fpm
+				  cp -aRL /etc/php/${PHPVERSION}/fpm/pool.d/${USERNAME}_${site[0]}.conf ${BACKUP_DATE_DIR}/${site[0]}/configs/php${PHPVERSION}-fpm/${USERNAME}_${site[0]}.conf 2>/dev/null || :
+				done
 
 				if [[ -n "${site[1]}" ]]; then
 					mkdir -p ${BACKUP_DATE_DIR}/${site[0]}/sql
