@@ -67,8 +67,8 @@ rm -Rf /var/log/mysql
 deluser --remove-home mysql
 delgroup mysql
 
-apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc' -y
-add-apt-repository "deb [arch=amd64,arm64,ppc64el] http://mirror.mephi.ru/mariadb/repo/10.6/ubuntu ${DISTRIB_CODENAME} main" -y
+wget -O- https://mariadb.org/mariadb_release_signing_key.asc | gpg --dearmor > /usr/share/keyrings/mariadb-release-keyring.gpg
+add-apt-repository "deb [arch=amd64,arm64,ppc64el signed-by=/usr/share/keyrings/mariadb-release-keyring.gpg] http://mirror.mephi.ru/mariadb/repo/10.6/ubuntu ${DISTRIB_CODENAME} main" -y
 apt-get update -y 2>>"$log"
 
 apt-get install mariadb-server -y 2>>"$log"
@@ -81,7 +81,7 @@ for PHPVERSION in ${PHPVERSIONS[@]}; do
   if [[ "${PHPVERSION}" == "7.4" ]]; then
     apt-get install php${PHPVERSION}-json
   fi
-  
+
   systemctl restart php${PHPVERSION}-fpm 2>>"$log"
 done
 
