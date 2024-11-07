@@ -107,11 +107,11 @@ if [[ "${CONTROLLER}" == "site" ]]; then
 			read DOMAIN
 
 			echo
-            echo 'Select PHP version'
-            PS3='Your choose: '
-            select PHPVERSION in ${PHPVERSIONS[@]}; do
-            	break
-            done
+      echo 'Select PHP version'
+      PS3='Your choose: '
+      select PHPVERSION in ${PHPVERSIONS[@]}; do
+       	break
+      done
 
 			NGINX_SITE_DIR="/etc/nginx/sites-available/"
 			APACHE_SITE_DIR="/etc/apache2/sites-available/"

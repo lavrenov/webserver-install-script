@@ -28,7 +28,7 @@ echo "===========================================" >>"$log"
 
 echo "Update system" | tee -a "$log"
 apt-get update -y && apt-get upgrade -y 2>>"$log"
-apt-get install curl unzip software-properties-common apt-transport-https members -y 2>>"$log"
+apt-get install curl unzip software-properties-common apt-transport-https members logrotate -y 2>>"$log"
 add-apt-repository ppa:ondrej/php -y
 apt-get update -y 2>>"$log"
 apt-get dist-upgrade -y 2>>"$log"
@@ -133,7 +133,7 @@ fi
 if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]]; then
 	echo "Install Fail2Ban" | tee -a "$log"
 	apt-get install fail2ban -y 2>>"$log"
-	cp ./config/etc/fail2ban/jail.d/defaults-debain.conf /etc/fail2ban/jail.d/defaults-debain.conf 2>>"$log"
+	cp ./config/etc/fail2ban/jail.d/base.conf /etc/fail2ban/jail.d/base.conf 2>>"$log"
 	systemctl restart fail2ban
 fi
 
