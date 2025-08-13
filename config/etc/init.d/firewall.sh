@@ -15,12 +15,13 @@ IPTABLES="/sbin/iptables"
 case "$1" in
     start|restart)
         echo -n "Loading Firewall's Packet Filters\n"
-        /etc/iptables.start
+        iptables-restore < /etc/iptables.rules
         ;;
 
     stop)
         echo -n "Stopping the firewall (in a closed state)!\n"
-        $IPTABLES --flush
+        iptables-save | tee /etc/iptables.rules > /dev/null
+        $IPTABLES -F
         $IPTABLES -X
         $IPTABLES -P INPUT ACCEPT
         $IPTABLES -P OUTPUT ACCEPT
