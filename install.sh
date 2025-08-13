@@ -152,6 +152,7 @@ if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]]; then
 	chmod +x /etc/init.d/firewall.sh 2>>"$log"
 	update-rc.d firewall.sh defaults 2>>"$log"
 	/etc/iptables.start
+	iptables-save | tee /etc/iptables.rules > /dev/null
 	service firewall.sh start
 fi
 
