@@ -2,13 +2,13 @@
 
 . /etc/lsb-release
 if [[ "${DISTRIB_CODENAME}" != "bionic" && "${DISTRIB_CODENAME}" != "focal" && "${DISTRIB_CODENAME}" != "jammy" ]]; then
-	echo "Your OS is not Ubuntu 18, Ubuntu 20 or Ubuntu 22"
+	echo "Your OS is not Ubuntu 20, Ubuntu 22 or Ubuntu 24"
 	sleep 1
 	exit 1
 fi
 
 FORCE_INSTALL=$1
-PHPVERSIONS=("7.4" "8.0" "8.1" "8.2" "8.3")
+PHPVERSIONS=("7.4" "8.0" "8.1" "8.2" "8.3" "8.4")
 
 if [[ "${FORCE_INSTALL}" != "-f" ]]; then
 	echo -n "Do you want to install WebServer? [Y/n] "
@@ -76,13 +76,21 @@ cp ./config/etc/mysql/conf.d/my.cnf /etc/mysql/conf.d/my.cnf 2>>"$log"
 systemctl restart mariadb
 
 for PHPVERSION in ${PHPVERSIONS[@]}; do
-  echo "Install PHP ${PHPVERSION}" | tee -a "$log"
-  apt-get install php${PHPVERSION} php${PHPVERSION}-fpm php${PHPVERSION}-mysql php${PHPVERSION}-curl php${PHPVERSION}-gd php${PHPVERSION}-zip php${PHPVERSION}-mbstring php${PHPVERSION}-xml php${PHPVERSION}-xmlrpc php${PHPVERSION}-gmp php${PHPVERSION}-memcached php${PHPVERSION}-intl php${PHPVERSION}-bcmath -y 2>>"$log"
-  if [[ "${PHPVERSION}" == "7.4" ]]; then
-    apt-get install php${PHPVERSION}-json
+  if [[ "${FORCE_INSTALL}" != "-f" ]]; then
+  	echo -n "Do you want to install PHP ${PHPVERSION}? [Y/n] "
+  	read USER_ANSWER
+  else
+  	USER_ANSWER="Y"
   fi
+  if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]]; then
+    echo "Install PHP ${PHPVERSION}" | tee -a "$log"
+    apt-get install php${PHPVERSION} php${PHPVERSION}-fpm php${PHPVERSION}-mysql php${PHPVERSION}-curl php${PHPVERSION}-gd php${PHPVERSION}-zip php${PHPVERSION}-mbstring php${PHPVERSION}-xml php${PHPVERSION}-xmlrpc php${PHPVERSION}-gmp php${PHPVERSION}-memcached php${PHPVERSION}-intl php${PHPVERSION}-bcmath -y 2>>"$log"
+    if [[ "${PHPVERSION}" == "7.4" ]]; then
+      apt-get install php${PHPVERSION}-json
+    fi
 
-  systemctl restart php${PHPVERSION}-fpm 2>>"$log"
+    systemctl restart php${PHPVERSION}-fpm 2>>"$log"
+  fi
 done
 
 if [[ "${FORCE_INSTALL}" != "-f" ]]; then

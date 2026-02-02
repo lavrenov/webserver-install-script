@@ -3,7 +3,7 @@
 . $(dirname "$0")/settings
 
 TASK=$1
-PHPVERSIONS=("7.4" "8.0" "8.1" "8.2" "8.3")
+PHPVERSIONS=("7.4" "8.0" "8.1" "8.2" "8.3" "8.4")
 
 if [[ "${TASK}" == "daily" || "${TASK}" == "weekly" || "${TASK}" == "monthly" || "${TASK}" == "yearly" ]]; then
 	if [[ "${TASK}" == "daily" ]]; then
