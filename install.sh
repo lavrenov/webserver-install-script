@@ -142,6 +142,7 @@ if [[ "${USER_ANSWER}" == "Y" || "${USER_ANSWER}" == "y" ]]; then
 	echo "Install Fail2Ban" | tee -a "$log"
 	apt-get install fail2ban -y 2>>"$log"
 	cp ./config/etc/fail2ban/jail.d/base.conf /etc/fail2ban/jail.d/base.conf 2>>"$log"
+	cp ./config/etc/fail2ban/filter.d/nginx-limit.conf /etc/fail2ban/filter.d/nginx-limit.conf 2>>"$log"
 	systemctl restart fail2ban
 fi
 
